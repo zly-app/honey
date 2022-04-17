@@ -21,6 +21,7 @@ const (
 
 type Config struct {
 	ThisLog struct {
+		Disable       bool   // 关闭honey服务本身的日志收集
 		Env           string // 环境名
 		Service       string // 服务名
 		Instance      string // 实例名

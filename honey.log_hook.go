@@ -9,22 +9,24 @@ import (
 )
 
 // 日志拦截函数
-func (h *Honey) logInterceptorFunc() func(ent *zapcore.Entry, fields []zapcore.Field) (cancel bool) {
-	return func(ent *zapcore.Entry, fields []zapcore.Field) (cancel bool) {
-		env, service, instance := h.conf.ThisLog.Env, h.conf.ThisLog.Service, h.conf.ThisLog.Instance
-		stopLogOutput := h.conf.ThisLog.StopLogOutput
-
-		log := log_data.MakeLogData(ent, fields)
-		h.Collect(env, service, instance, []*log_data.LogData{log})
-		return stopLogOutput && h.isStart() // 设置了拦截并且在服务启动后才允许拦截
+func (h *Honey) logInterceptorFunc(ent *zapcore.Entry, fields []zapcore.Field) (cancel bool) {
+	if h.conf.ThisLog.Disable {
+		return false
 	}
+
+	env, service, instance := h.conf.ThisLog.Env, h.conf.ThisLog.Service, h.conf.ThisLog.Instance
+	stopLogOutput := h.conf.ThisLog.StopLogOutput
+
+	log := log_data.MakeLogData(ent, fields)
+	h.Collect(env, service, instance, []*log_data.LogData{log})
+	return stopLogOutput && h.isStart() // 设置了拦截并且在服务启动后才允许拦截
 }
 
 // 提供日志hook的zapp选项
 func (h *Honey) LogHook() zapp.Option {
 	logConf := zlog.NewHookConfig().
-		AddStartHookCallbacks(h.Init).             // 通过日志启动hook的能力提供初始化
-		AddInterceptorFunc(h.logInterceptorFunc()) // 添加拦截函数
+		AddStartHookCallbacks(h.Init).           // 通过日志启动hook的能力提供初始化
+		AddInterceptorFunc(h.logInterceptorFunc) // 添加拦截函数
 	return zapp.WithLoggerOptions(zlog.WithHookByConfig(logConf))
 }
 
