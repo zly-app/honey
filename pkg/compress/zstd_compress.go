@@ -34,6 +34,6 @@ func (Z *ZStdCompress) UnCompress(in io.Reader, out io.Writer) error {
 	return err
 }
 
-func NewZStdCompress() Compress {
+func NewZStdCompress() ICompress {
 	return &ZStdCompress{}
 }

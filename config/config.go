@@ -56,7 +56,7 @@ func (conf *Config) Check() error {
 		conf.ThisLog.Service = zapp.App().Name()
 	}
 	if conf.ThisLog.Instance == "" {
-		conf.ThisLog.Instance = instance.GetInstance()
+		conf.ThisLog.Instance = utils.GetInstance()
 	}
 	return nil
 }

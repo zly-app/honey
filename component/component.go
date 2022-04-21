@@ -7,19 +7,19 @@ import (
 )
 
 // 日志收集器
-type LogCollector interface {
+type ILogCollector interface {
 	// 收集
 	Collect(env, service, instance string, log []*log_data.LogData)
 }
 
 type IComponent interface {
 	core.IComponent
-	LogCollector
+	ILogCollector
 }
 
 type Component struct {
 	core.IComponent
-	LogCollector
+	ILogCollector
 }
 
 func (c *Component) Close() {

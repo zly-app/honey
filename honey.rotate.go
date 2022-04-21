@@ -9,18 +9,18 @@ import (
 )
 
 type rotateWaitGroup struct {
-	r  rotate.Rotator
+	r  rotate.IRotator
 	wg sync.WaitGroup
 }
 
 type rotateEnvGroup struct {
-	creator func(env string) rotate.Rotator // 旋转器建造者
+	creator func(env string) rotate.IRotator // 旋转器建造者
 	wgs     map[string]*rotateWaitGroup
 	mx      sync.RWMutex
 }
 
 // 获取rotate
-func (r *rotateEnvGroup) GetRotate(env string) rotate.Rotator {
+func (r *rotateEnvGroup) GetRotate(env string) rotate.IRotator {
 	r.mx.RLock()
 	wg, ok := r.wgs[env]
 	r.mx.RUnlock()
@@ -52,11 +52,11 @@ func (r *rotateEnvGroup) GetRotate(env string) rotate.Rotator {
 }
 
 // 获取所有rotate
-func (r *rotateEnvGroup) GetAllRotate() []rotate.Rotator {
+func (r *rotateEnvGroup) GetAllRotate() []rotate.IRotator {
 	r.mx.Lock()
 	defer r.mx.Unlock()
 
-	rotates := make([]rotate.Rotator, len(r.wgs))
+	rotates := make([]rotate.IRotator, len(r.wgs))
 	index := 0
 	for _, wg := range r.wgs {
 		wg.wg.Wait()
@@ -66,7 +66,7 @@ func (r *rotateEnvGroup) GetAllRotate() []rotate.Rotator {
 	return rotates
 }
 
-func newRotateGroup(creator func(env string) rotate.Rotator) *rotateEnvGroup {
+func newRotateGroup(creator func(env string) rotate.IRotator) *rotateEnvGroup {
 	return &rotateEnvGroup{
 		creator: creator,
 		wgs:     make(map[string]*rotateWaitGroup),
@@ -74,7 +74,7 @@ func newRotateGroup(creator func(env string) rotate.Rotator) *rotateEnvGroup {
 }
 
 // 旋转器建造者
-func (h *Honey) rotateCreator(env string) rotate.Rotator {
+func (h *Honey) rotateCreator(env string) rotate.IRotator {
 	opts := []rotate.Option{
 		rotate.WithBatchSize(h.conf.BatchSize),
 		rotate.WithAutoRotateTime(time.Duration(h.conf.AutoRotateTime) * time.Second),

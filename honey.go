@@ -65,8 +65,8 @@ func (h *Honey) Close() error {
 func (h *Honey) WithCustomComponent() zapp.Option {
 	return zapp.WithCustomComponent(func(app core.IApp) core.IComponent {
 		return &component.Component{
-			IComponent:   app.GetComponent(),
-			LogCollector: h,
+			IComponent:    app.GetComponent(),
+			ILogCollector: h,
 		}
 	})
 }

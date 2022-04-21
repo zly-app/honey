@@ -11,7 +11,7 @@ const minBatchSize = 1
 const minAutoRotateTime = time.Second
 
 // 旋转器
-type Rotator interface {
+type IRotator interface {
 	// 添加
 	Add(a interface{})
 	// 立即旋转
@@ -105,7 +105,7 @@ func (r *rotate) Apply(opts []Option) {
 	}
 }
 
-func NewRotate(callback func(values []interface{}), opts ...Option) Rotator {
+func NewRotate(callback func(values []interface{}), opts ...Option) IRotator {
 	r := &rotate{
 		channel:      make(chan interface{}),
 		rotateSignal: make(chan struct{}),
