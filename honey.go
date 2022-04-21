@@ -18,6 +18,7 @@ const DefaultServiceType core.ServiceType = "honey"
 
 type Honey struct {
 	app         core.IApp
+	c           component.IComponent
 	conf        *config.Config
 	rotateGroup *rotateEnvGroup
 	mx          sync.Mutex
@@ -38,6 +39,8 @@ func (h *Honey) Init() {
 	h.conf = conf
 	// 创建旋转器组
 	h.rotateGroup = newRotateGroup(h.rotateCreator)
+
+	h.InitInput()
 }
 
 func (h *Honey) Inject(a ...interface{}) {}
@@ -64,17 +67,12 @@ func (h *Honey) Close() error {
 // 自定义component
 func (h *Honey) WithCustomComponent() zapp.Option {
 	return zapp.WithCustomComponent(func(app core.IApp) core.IComponent {
-		return &component.Component{
+		c := &component.Component{
 			IComponent:    app.GetComponent(),
 			ILogCollector: h,
 		}
-	})
-}
-
-// 自定义服务
-func (h *Honey) WithCustomEnableService() zapp.Option {
-	return zapp.WithCustomEnableService(func(app core.IApp, services map[core.ServiceType]bool) {
-		// todo 待实现
+		h.c = c
+		return c
 	})
 }
 

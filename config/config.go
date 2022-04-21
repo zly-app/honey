@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/zly-app/zapp"
 
-	"github.com/zly-app/honey/pkg/instance"
+	"github.com/zly-app/honey/pkg/utils"
 )
 
 var Conf *Config
@@ -31,7 +31,7 @@ type Config struct {
 	BatchSize      int // 批次大小, 累计达到这个大小立即写入一次日志, 不用等待时间
 	AutoRotateTime int // 自动旋转时间(秒), 如果没有达到累计写入批次大小, 在指定时间后也会立即写入
 
-	HttpReceiver bool // 启用http接收器
+	Inputs string // 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
 }
 
 func NewConfig() *Config {

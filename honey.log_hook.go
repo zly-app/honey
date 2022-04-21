@@ -10,16 +10,14 @@ import (
 
 // 日志拦截函数
 func (h *Honey) logInterceptorFunc(ent *zapcore.Entry, fields []zapcore.Field) (cancel bool) {
-	if h.conf.ThisLog.Disable {
+	conf := h.conf.ThisLog
+	if conf.Disable {
 		return false
 	}
 
-	env, service, instance := h.conf.ThisLog.Env, h.conf.ThisLog.Service, h.conf.ThisLog.Instance
-	stopLogOutput := h.conf.ThisLog.StopLogOutput
-
 	log := log_data.MakeLogData(ent, fields)
-	h.Collect(env, service, instance, []*log_data.LogData{log})
-	return stopLogOutput && h.isStart() // 设置了拦截并且在服务启动后才允许拦截
+	h.Collect(conf.Env, conf.Service, conf.Instance, []*log_data.LogData{log})
+	return conf.StopLogOutput && h.isStart() // 设置了拦截并且在服务启动后才允许拦截
 }
 
 // 提供日志hook的zapp选项
