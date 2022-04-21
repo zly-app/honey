@@ -11,7 +11,10 @@ import (
 type InputCreator func(c component.IComponent) IInput
 
 // 输入设备
-type IInput interface{}
+type IInput interface {
+	Start()
+	Close()
+}
 
 var inputCreators = make(map[string]InputCreator)
 

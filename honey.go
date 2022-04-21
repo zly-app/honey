@@ -1,7 +1,6 @@
 package main
 
 import (
-	"sync"
 	"sync/atomic"
 
 	"github.com/zly-app/zapp"
@@ -11,18 +10,20 @@ import (
 
 	"github.com/zly-app/honey/component"
 	"github.com/zly-app/honey/config"
+	"github.com/zly-app/honey/input"
 )
 
 // 默认服务类型
 const DefaultServiceType core.ServiceType = "honey"
 
 type Honey struct {
-	app         core.IApp
-	c           component.IComponent
-	conf        *config.Config
-	rotateGroup *rotateEnvGroup
-	mx          sync.Mutex
-	state       int32 // 启动状态 0未启动, 1已启动
+	app   core.IApp
+	c     component.IComponent
+	conf  *config.Config // 配置
+	state int32          // 启动状态 0未启动, 1已启动
+
+	rotateGroup *rotateEnvGroup // 旋转组
+	inputs      []input.IInput  // 输入设备
 }
 
 func (h *Honey) Init() {
@@ -40,7 +41,7 @@ func (h *Honey) Init() {
 	// 创建旋转器组
 	h.rotateGroup = newRotateGroup(h.rotateCreator)
 
-	h.InitInput()
+	h.MakeInput()
 }
 
 func (h *Honey) Inject(a ...interface{}) {}
@@ -51,11 +52,16 @@ func (h *Honey) isStart() bool {
 
 func (h *Honey) Start() error {
 	atomic.StoreInt32(&h.state, 1)
+	// 启动输入设备
+	h.StartInput()
 	return nil
 }
 
 func (h *Honey) Close() error {
 	atomic.StoreInt32(&h.state, 0)
+	// 关闭输入设备
+	h.CloseInput()
+
 	// 立即旋转
 	rotates := h.rotateGroup.GetAllRotate()
 	for _, r := range rotates {

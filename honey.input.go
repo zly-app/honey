@@ -6,14 +6,30 @@ import (
 	"github.com/zly-app/honey/input"
 )
 
-// 初始化输入设备
-func (h *Honey) InitInput() {
+// 生成输入设备
+func (h *Honey) MakeInput() {
 	if h.conf.Inputs == "" {
 		return
 	}
 
 	names := strings.Split(h.conf.Inputs, ",")
-	for _, name := range names {
-		input.MakeInput(h.c, name)
+	h.inputs = make([]input.IInput, len(names))
+	for i := range names {
+		in := input.MakeInput(h.c, names[i])
+		h.inputs[i] = in
+	}
+}
+
+// 启动输入设备
+func (h *Honey) StartInput() {
+	for _, in := range h.inputs {
+		in.Start()
+	}
+}
+
+// 关闭输入设备
+func (h *Honey) CloseInput() {
+	for _, in := range h.inputs {
+		in.Close()
 	}
 }

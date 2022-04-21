@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/pkg/rotate"
 )
 
@@ -87,8 +88,13 @@ func (h *Honey) rotateCreator(env string) rotate.IRotator {
 
 // 旋转器回调
 func (h *Honey) RotateCallback(env string, a []interface{}) {
+	data := make([]*log_data.CollectData, len(a))
+	for i, v := range a {
+		data[i] = v.(*log_data.CollectData)
+	}
+
 	// todo 待实现
-	for _, v := range a {
-		fmt.Println(env, v)
+	for _, v := range data {
+		fmt.Println(env, v.Service, v.Instance, *v.LogData)
 	}
 }
