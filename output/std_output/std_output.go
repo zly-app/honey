@@ -10,7 +10,7 @@ import (
 	"github.com/zly-app/honey/output"
 )
 
-var StdFormat = "[{dev}.{service}.{instance}][{time}] {level} {msg} {fields} {line} {trace_id}"
+var StdFormat = "[{dev}.{service}][{instance}][{time}] {level} {msg} {fields} {line} {trace_id}"
 var TimeFormat = "2006-01-02 15:04:05.999999"
 
 type StdOutput struct{}

@@ -11,6 +11,8 @@ var Conf *Config
 const (
 	// 默认环境名
 	DefaultThisLogEnv = "dev"
+	// 默认的实例名
+	DefaultInstanceName = "default"
 	// 停止原有的日志输出
 	DefaultThisLogStopLogOutput = true
 
@@ -57,7 +59,7 @@ func (conf *Config) Check() error {
 		conf.ThisLog.Service = zapp.App().Name()
 	}
 	if conf.ThisLog.Instance == "" {
-		conf.ThisLog.Instance = utils.GetInstance()
+		conf.ThisLog.Instance = utils.GetInstance(DefaultInstanceName)
 	}
 
 	if conf.LogBatchSize < 1 {
