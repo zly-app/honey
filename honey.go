@@ -23,7 +23,9 @@ type Honey struct {
 	state int32          // 启动状态 0未启动, 1已启动
 
 	rotateGroup *rotateEnvGroup // 旋转组
-	inputs      []input.IInput  // 输入设备
+	rotateGPool core.IGPool     // 用于处理同时旋转的协程池
+
+	inputs []input.IInput // 输入设备
 }
 
 func (h *Honey) Init() {
@@ -38,9 +40,8 @@ func (h *Honey) Init() {
 		h.app.Fatal("honey配置错误", zap.String("ServiceType", string(DefaultServiceType)), zap.Error(err))
 	}
 	h.conf = conf
-	// 创建旋转器组
-	h.rotateGroup = newRotateGroup(h.rotateCreator)
 
+	h.MakeRotateGroup()
 	h.MakeInput()
 }
 

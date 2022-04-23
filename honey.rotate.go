@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/zly-app/zapp/component/gpool"
+
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/pkg/rotate"
 )
@@ -67,21 +69,28 @@ func (r *rotateEnvGroup) GetAllRotate() []rotate.IRotator {
 	return rotates
 }
 
-func newRotateGroup(creator func(env string) rotate.IRotator) *rotateEnvGroup {
-	return &rotateEnvGroup{
-		creator: creator,
+// 生成旋转组
+func (h *Honey) MakeRotateGroup() {
+	h.rotateGroup = &rotateEnvGroup{
+		creator: h.rotateCreator,
 		wgs:     make(map[string]*rotateWaitGroup),
 	}
+	h.rotateGPool = gpool.NewGPool(&gpool.GPoolConfig{
+		ThreadCount: h.conf.MaxRotateThreadNum,
+	})
 }
 
 // 旋转器建造者
 func (h *Honey) rotateCreator(env string) rotate.IRotator {
 	opts := []rotate.Option{
-		rotate.WithBatchSize(h.conf.BatchSize),
+		rotate.WithBatchSize(h.conf.LogBatchSize),
 		rotate.WithAutoRotateTime(time.Duration(h.conf.AutoRotateTime) * time.Second),
 	}
 	callback := func(values []interface{}) {
-		h.RotateCallback(env, values)
+		h.rotateGPool.Go(func() error {
+			h.RotateCallback(env, values)
+			return nil
+		})
 	}
 	return rotate.NewRotate(callback, opts...)
 }
