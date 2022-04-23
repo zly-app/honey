@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
@@ -102,8 +101,8 @@ func (h *Honey) RotateCallback(env string, a []interface{}) {
 		data[i] = v.(*log_data.CollectData)
 	}
 
-	// todo 待实现
-	for _, v := range data {
-		fmt.Println(env, v.Service, v.Instance, *v.LogData)
+	// 输出
+	for _, out := range h.outputs {
+		out.Out(env, data)
 	}
 }

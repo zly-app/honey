@@ -20,6 +20,9 @@ const (
 	DefaultAutoRotateTime = 5
 	// 默认最大旋转线程数
 	DefaultMaxRotateThreadNum = 10
+
+	// 默认输出设备列表
+	DefaultOutputs = "std"
 )
 
 type Config struct {
@@ -35,7 +38,8 @@ type Config struct {
 	AutoRotateTime     int // 自动旋转时间(秒), 如果没有达到累计写入批次大小, 在指定时间后也会立即写入
 	MaxRotateThreadNum int // 最大旋转线程数, 表示同时允许多少批次发送到输出设备
 
-	Inputs string // 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
+	Inputs  string // 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
+	Outputs string // 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std
 }
 
 func NewConfig() *Config {
@@ -64,6 +68,10 @@ func (conf *Config) Check() error {
 	}
 	if conf.MaxRotateThreadNum < 1 {
 		conf.MaxRotateThreadNum = DefaultMaxRotateThreadNum
+	}
+
+	if conf.Outputs == "" {
+		conf.Outputs = DefaultOutputs
 	}
 
 	return nil

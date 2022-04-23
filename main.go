@@ -4,6 +4,7 @@ import (
 	"github.com/zly-app/zapp"
 
 	_ "github.com/zly-app/honey/input/http_input"
+	_ "github.com/zly-app/honey/output/std_output"
 )
 
 func main() {

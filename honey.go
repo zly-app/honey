@@ -2,6 +2,7 @@ package main
 
 import (
 	"sync/atomic"
+	"time"
 
 	"github.com/zly-app/zapp"
 	"github.com/zly-app/zapp/core"
@@ -11,6 +12,7 @@ import (
 	"github.com/zly-app/honey/component"
 	"github.com/zly-app/honey/config"
 	"github.com/zly-app/honey/input"
+	"github.com/zly-app/honey/output"
 )
 
 // 默认服务类型
@@ -25,7 +27,8 @@ type Honey struct {
 	rotateGroup *rotateEnvGroup // 旋转组
 	rotateGPool core.IGPool     // 用于处理同时旋转的协程池
 
-	inputs []input.IInput // 输入设备
+	inputs  []input.IInput   // 输入设备
+	outputs []output.IOutput // 输出设备
 }
 
 func (h *Honey) Init() {
@@ -43,6 +46,7 @@ func (h *Honey) Init() {
 
 	h.MakeRotateGroup()
 	h.MakeInput()
+	h.MakeOutput()
 }
 
 func (h *Honey) Inject(a ...interface{}) {}
@@ -55,6 +59,8 @@ func (h *Honey) Start() error {
 	atomic.StoreInt32(&h.state, 1)
 	// 启动输入设备
 	h.StartInput()
+	// 启动输出设备
+	h.StartOutput()
 	return nil
 }
 
@@ -68,6 +74,13 @@ func (h *Honey) Close() error {
 	for _, r := range rotates {
 		r.Rotate()
 	}
+
+	// 等待处理
+	time.Sleep(time.Second)
+	h.rotateGPool.Wait()
+
+	// 关闭输出设备
+	h.CloseOutput()
 	return nil
 }
 
