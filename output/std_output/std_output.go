@@ -18,12 +18,12 @@ type StdOutput struct{}
 func (s *StdOutput) Start() error { return nil }
 func (s *StdOutput) Close() error { return nil }
 
-func (s *StdOutput) Out(env string, data []*log_data.CollectData) {
+func (s *StdOutput) Out(env, service, instance string, data []*log_data.LogData) {
 	for _, v := range data {
 		text := StdFormat
 		text = strings.ReplaceAll(text, "{dev}", env)
-		text = strings.ReplaceAll(text, "{service}", v.Service)
-		text = strings.ReplaceAll(text, "{instance}", v.Instance)
+		text = strings.ReplaceAll(text, "{service}", service)
+		text = strings.ReplaceAll(text, "{instance}", instance)
 		text = strings.ReplaceAll(text, "{time}", time.Unix(0, v.T*1000).Format(TimeFormat))
 		text = strings.ReplaceAll(text, "{level}", v.Level)
 		text = strings.ReplaceAll(text, "{msg}", v.Msg)

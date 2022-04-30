@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -16,15 +17,17 @@ type rotateWaitGroup struct {
 }
 
 type rotateEnvGroup struct {
-	creator func(env string) rotate.IRotator // 旋转器建造者
+	creator func(env, service, instance string) rotate.IRotator // 旋转器建造者
 	wgs     map[string]*rotateWaitGroup
 	mx      sync.RWMutex
 }
 
 // 获取rotate
-func (r *rotateEnvGroup) GetRotate(env string) rotate.IRotator {
+func (r *rotateEnvGroup) GetRotate(env, service, instance string) rotate.IRotator {
+	name := fmt.Sprintf("%s|%s|%s", env, service, instance)
+
 	r.mx.RLock()
-	wg, ok := r.wgs[env]
+	wg, ok := r.wgs[name]
 	r.mx.RUnlock()
 
 	if ok {
@@ -35,7 +38,7 @@ func (r *rotateEnvGroup) GetRotate(env string) rotate.IRotator {
 	r.mx.Lock()
 
 	// 再获取一次, 它可能在获取锁的过程中完成了
-	if wg, ok = r.wgs[env]; ok {
+	if wg, ok = r.wgs[name]; ok {
 		r.mx.Unlock()
 		wg.wg.Wait()
 		return wg.r
@@ -44,11 +47,11 @@ func (r *rotateEnvGroup) GetRotate(env string) rotate.IRotator {
 	// 占位置
 	wg = new(rotateWaitGroup)
 	wg.wg.Add(1)
-	r.wgs[env] = wg
+	r.wgs[name] = wg
 	r.mx.Unlock()
 
 	// 创建
-	wg.r = r.creator(env)
+	wg.r = r.creator(env, service, instance)
 	wg.wg.Done()
 	return wg.r
 }
@@ -80,14 +83,14 @@ func (h *Honey) MakeRotateGroup() {
 }
 
 // 旋转器建造者
-func (h *Honey) rotateCreator(env string) rotate.IRotator {
+func (h *Honey) rotateCreator(env, service, instance string) rotate.IRotator {
 	opts := []rotate.Option{
 		rotate.WithBatchSize(h.conf.LogBatchSize),
 		rotate.WithAutoRotateTime(time.Duration(h.conf.AutoRotateTime) * time.Second),
 	}
 	callback := func(values []interface{}) {
 		h.rotateGPool.Go(func() error {
-			h.RotateCallback(env, values)
+			h.RotateCallback(env, service, instance, values)
 			return nil
 		})
 	}
@@ -95,14 +98,14 @@ func (h *Honey) rotateCreator(env string) rotate.IRotator {
 }
 
 // 旋转器回调
-func (h *Honey) RotateCallback(env string, a []interface{}) {
-	data := make([]*log_data.CollectData, len(a))
+func (h *Honey) RotateCallback(env, service, instance string, a []interface{}) {
+	data := make([]*log_data.LogData, len(a))
 	for i, v := range a {
-		data[i] = v.(*log_data.CollectData)
+		data[i] = v.(*log_data.LogData)
 	}
 
 	// 输出
 	for _, out := range h.outputs {
-		out.Out(env, data)
+		out.Out(env, service, instance, data)
 	}
 }

@@ -16,7 +16,7 @@ type IOutput interface {
 	Start() error
 	Close() error
 	// 输出
-	Out(env string, data []*log_data.CollectData)
+	Out(env, service, instance string, data []*log_data.LogData)
 }
 
 var outputCreators = make(map[string]OutputCreator)
