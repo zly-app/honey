@@ -17,7 +17,7 @@ const (
 	// 默认批次大小
 	DefaultLogBatchSize = 10000
 	// 默认自动旋转时间(秒)
-	DefaultAutoRotateTime = 5
+	DefaultAutoRotateTime = 3
 	// 默认最大旋转线程数
 	DefaultMaxRotateThreadNum = 10
 
