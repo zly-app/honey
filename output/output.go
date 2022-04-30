@@ -31,9 +31,9 @@ func RegistryOutputCreator(name string, oc OutputCreator) {
 
 // 生成输出设备
 func MakeOutput(c component.IComponent, name string) IOutput {
-	rc, ok := outputCreators[name]
+	oc, ok := outputCreators[name]
 	if !ok {
 		logger.Log.Fatal("试图构建未注册建造者的Output", zap.String("name", name))
 	}
-	return rc(c)
+	return oc(c)
 }

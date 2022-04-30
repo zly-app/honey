@@ -28,9 +28,9 @@ func RegistryInputCreator(name string, rc InputCreator) {
 
 // 生成输入设备
 func MakeInput(c component.IComponent, name string) IInput {
-	rc, ok := inputCreators[name]
+	ic, ok := inputCreators[name]
 	if !ok {
 		logger.Log.Fatal("试图构建未注册建造者的Input", zap.String("name", name))
 	}
-	return rc(c)
+	return ic(c)
 }

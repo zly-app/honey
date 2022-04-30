@@ -12,7 +12,7 @@ const (
 	// 默认环境名
 	DefaultThisLogEnv = "dev"
 	// 默认的实例名
-	DefaultInstanceName = "default"
+	DefaultThisLogInstance = "default"
 	// 停止原有的日志输出
 	DefaultThisLogStopLogOutput = true
 
@@ -40,8 +40,8 @@ type Config struct {
 	AutoRotateTime     int // 自动旋转时间(秒), 如果没有达到累计写入批次大小, 在指定时间后也会立即写入
 	MaxRotateThreadNum int // 最大旋转线程数, 表示同时允许多少批次发送到输出设备
 
-	Inputs  string // 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
-	Outputs string // 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std
+	Inputs  string // 输入设备列表, 多个输入设备用半角逗号`,`分隔
+	Outputs string // 输出设备列表, 多个输出设备用半角逗号`,`分隔
 }
 
 func NewConfig() *Config {
@@ -59,7 +59,7 @@ func (conf *Config) Check() error {
 		conf.ThisLog.Service = zapp.App().Name()
 	}
 	if conf.ThisLog.Instance == "" {
-		conf.ThisLog.Instance = utils.GetInstance(DefaultInstanceName)
+		conf.ThisLog.Instance = utils.GetInstance(DefaultThisLogInstance)
 	}
 
 	if conf.LogBatchSize < 1 {
