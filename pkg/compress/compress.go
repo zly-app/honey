@@ -15,6 +15,7 @@ type ICompress interface {
 }
 
 var compresses = map[string]ICompress{
+	RawCompressName:  NewRawCompress(),
 	ZStdCompressName: NewZStdCompress(),
 }
 

@@ -15,8 +15,8 @@ var TimeFormat = "2006-01-02 15:04:05.999999"
 
 type StdOutput struct{}
 
-func (s *StdOutput) Start() {}
-func (s *StdOutput) Close() {}
+func (s *StdOutput) Start() error { return nil }
+func (s *StdOutput) Close() error { return nil }
 
 func (s *StdOutput) Out(env string, data []*log_data.CollectData) {
 	for _, v := range data {

@@ -12,8 +12,8 @@ type InputCreator func(c component.IComponent) IInput
 
 // 输入设备
 type IInput interface {
-	Start()
-	Close()
+	Start() error
+	Close() error
 }
 
 var inputCreators = make(map[string]InputCreator)

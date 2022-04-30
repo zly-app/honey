@@ -27,8 +27,8 @@ type Honey struct {
 	rotateGroup *rotateEnvGroup // 旋转组
 	rotateGPool core.IGPool     // 用于处理同时旋转的协程池
 
-	inputs  []input.IInput   // 输入设备
-	outputs []output.IOutput // 输出设备
+	inputs  map[string]input.IInput   // 输入设备
+	outputs map[string]output.IOutput // 输出设备
 }
 
 func (h *Honey) Init() {
@@ -45,8 +45,6 @@ func (h *Honey) Init() {
 	h.conf = conf
 
 	h.MakeRotateGroup()
-	h.MakeInput()
-	h.MakeOutput()
 }
 
 func (h *Honey) Inject(a ...interface{}) {}
@@ -58,8 +56,10 @@ func (h *Honey) isStart() bool {
 func (h *Honey) Start() error {
 	atomic.StoreInt32(&h.state, 1)
 	// 启动输入设备
+	h.MakeInput()
 	h.StartInput()
 	// 启动输出设备
+	h.MakeOutput()
 	h.StartOutput()
 	return nil
 }

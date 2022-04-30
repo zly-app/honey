@@ -11,7 +11,10 @@ const ZStdCompressName = "zstd"
 type ZStdCompress struct{}
 
 func (Z *ZStdCompress) Compress(in io.Reader, out io.Writer) error {
-	enc, err := zstd.NewWriter(out)
+	opts := []zstd.EOption{
+		zstd.WithEncoderLevel(zstd.SpeedFastest), // 最快压缩
+	}
+	enc, err := zstd.NewWriter(out, opts...)
 	if err != nil {
 		return err
 	}

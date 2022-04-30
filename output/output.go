@@ -13,8 +13,8 @@ type OutputCreator func(c component.IComponent) IOutput
 
 // 输出设备
 type IOutput interface {
-	Start()
-	Close()
+	Start() error
+	Close() error
 	// 输出
 	Out(env string, data []*log_data.CollectData)
 }
