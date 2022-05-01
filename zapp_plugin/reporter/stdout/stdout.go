@@ -8,7 +8,7 @@ import (
 	"github.com/zly-app/zapp/core"
 
 	"github.com/zly-app/honey/log_data"
-	"github.com/zly-app/honey/zapp_plugin/honey/reporter"
+	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
 var StdFormat = "[{dev}.{service}][{instance}][{time}] {level} {msg} {fields} {line} {trace_id}"

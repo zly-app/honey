@@ -5,7 +5,7 @@ import (
 	"github.com/zly-app/zapp/core"
 	"github.com/zly-app/zapp/pkg/zlog"
 
-	_ "github.com/zly-app/honey/zapp_plugin/honey/reporter/stdout"
+	_ "github.com/zly-app/honey/zapp_plugin/reporter/stdout"
 )
 
 // 默认插件类型

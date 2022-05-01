@@ -8,7 +8,7 @@ import (
 	"github.com/zly-app/zapp/service"
 	"go.uber.org/zap"
 
-	"github.com/zly-app/honey/zapp_plugin/honey/reporter"
+	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
 // 生成上报器

@@ -10,8 +10,8 @@ import (
 
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/pkg/rotate"
-	"github.com/zly-app/honey/zapp_plugin/honey/config"
-	"github.com/zly-app/honey/zapp_plugin/honey/reporter"
+	"github.com/zly-app/honey/zapp_plugin/config"
+	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
 type HoneyPlugin struct {
