@@ -5,9 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zly-app/zapp/core"
-
 	"github.com/zly-app/honey/log_data"
+	"github.com/zly-app/honey/zapp_plugin/component"
 	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
@@ -40,7 +39,7 @@ func (s *StdReporter) Report(env, service, instance string, data []*log_data.Log
 const StdReporterName = "std"
 
 func init() {
-	reporter.RegisterReporterCreator(StdReporterName, func(app core.IApp) reporter.IReporter {
+	reporter.RegisterReporterCreator(StdReporterName, func(c component.IComponent) reporter.IReporter {
 		return &StdReporter{}
 	})
 }

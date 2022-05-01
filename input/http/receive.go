@@ -41,12 +41,14 @@ func (h *HttpInput) Receive(ctx *api.Context) error {
 	}
 
 	logs := []*log_data.LogData{}
-	err = h.serializer.Unmarshal(body, logs)
+	err = h.serializer.Unmarshal(body, &logs)
 	if err != nil {
 		return fmt.Errorf("解码失败: %v", err)
 	}
 
-	h.c.Collect(env, service, instance, logs)
+	if len(logs) > 0 {
+		h.c.Collect(env, service, instance, logs)
+	}
 
 	return nil
 }

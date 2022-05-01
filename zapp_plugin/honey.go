@@ -11,12 +11,14 @@ import (
 
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/pkg/rotate"
+	"github.com/zly-app/honey/zapp_plugin/component"
 	"github.com/zly-app/honey/zapp_plugin/config"
 	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
 type HoneyPlugin struct {
 	app    core.IApp
+	c      component.IComponent
 	conf   *config.Config
 	isInit bool  // 是否完成初始化
 	state  int32 // 启动状态 0未启动, 1已启动
@@ -31,12 +33,12 @@ func (h *HoneyPlugin) Init() {
 	h.app = zapp.App()
 	// 解析配置
 	conf := config.NewConfig()
-	err := h.app.GetConfig().ParsePluginConfig(nowPluginType, conf, true)
+	err := h.app.GetConfig().ParsePluginConfig(DefaultPluginType, conf, true)
 	if err == nil {
 		err = conf.Check()
 	}
 	if err != nil {
-		h.app.Fatal("honey插件配置错误", zap.String("PluginType", string(nowPluginType)), zap.Error(err))
+		h.app.Fatal("honey插件配置错误", zap.String("PluginType", string(DefaultPluginType)), zap.Error(err))
 	}
 	h.conf = conf
 
@@ -53,6 +55,7 @@ func (h *HoneyPlugin) Start() {
 		return
 	}
 	atomic.StoreInt32(&h.state, 1)
+	h.c = component.NewComponent(h.app.GetComponent())
 
 	// 启动上报者
 	h.MakeReporter()

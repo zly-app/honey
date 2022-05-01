@@ -5,19 +5,12 @@ import (
 	"github.com/zly-app/zapp/core"
 	"github.com/zly-app/zapp/pkg/zlog"
 
+	_ "github.com/zly-app/honey/zapp_plugin/reporter/http"
 	_ "github.com/zly-app/honey/zapp_plugin/reporter/std"
 )
 
 // 默认插件类型
 const DefaultPluginType core.PluginType = "honey"
-
-// 当前插件类型
-var nowPluginType = DefaultPluginType
-
-// 设置插件类型, 这个函数应该在 zapp.NewApp 之前调用
-func SetPluginType(t core.PluginType) {
-	nowPluginType = t
-}
 
 // 启用插件
 func WithPlugin() zapp.Option {

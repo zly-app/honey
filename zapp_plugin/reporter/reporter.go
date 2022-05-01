@@ -1,15 +1,15 @@
 package reporter
 
 import (
-	"github.com/zly-app/zapp/core"
 	"github.com/zly-app/zapp/logger"
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/log_data"
+	"github.com/zly-app/honey/zapp_plugin/component"
 )
 
 // 上报者创造者
-type IReporterCreator func(app core.IApp) IReporter
+type IReporterCreator func(c component.IComponent) IReporter
 
 // 上报者
 type IReporter interface {
@@ -30,10 +30,10 @@ func RegisterReporterCreator(name string, rc IReporterCreator) {
 }
 
 // 生成上报者
-func MakeReporter(app core.IApp, name string) IReporter {
+func MakeReporter(c component.IComponent, name string) IReporter {
 	rc, ok := reporterCreators[name]
 	if !ok {
 		logger.Log.Fatal("试图构建未注册创造者的Reporter", zap.String("name", name))
 	}
-	return rc(app)
+	return rc(c)
 }

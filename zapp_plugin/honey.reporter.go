@@ -20,7 +20,7 @@ func (h *HoneyPlugin) MakeReporter() {
 	names := strings.Split(h.conf.Reports, ",")
 	h.reporters = make(map[string]reporter.IReporter, len(names))
 	for i := range names {
-		r := reporter.MakeReporter(h.app, names[i])
+		r := reporter.MakeReporter(h.c, names[i])
 		h.reporters[names[i]] = r
 	}
 }
@@ -29,7 +29,7 @@ func (h *HoneyPlugin) MakeReporter() {
 func (h *HoneyPlugin) StartReporter() {
 	for name, r := range h.reporters {
 		err := service.WaitRun(h.app, &service.WaitRunOption{
-			ServiceType:        core.ServiceType(nowPluginType),
+			ServiceType:        core.ServiceType(DefaultPluginType),
 			ExitOnErrOfObserve: true,
 			RunServiceFn: func() error {
 				err := r.Start()
