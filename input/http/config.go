@@ -1,4 +1,4 @@
-package http_input
+package http
 
 const (
 	// 默认bind

@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/zly-app/zapp"
 
-	_ "github.com/zly-app/honey/input/http_input"
-	_ "github.com/zly-app/honey/output/std_output"
+	_ "github.com/zly-app/honey/input/http"
+	_ "github.com/zly-app/honey/output/std"
 )
 
 func main() {

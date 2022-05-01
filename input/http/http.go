@@ -1,4 +1,4 @@
-package http_input
+package http
 
 import (
 	"github.com/zly-app/service/api"

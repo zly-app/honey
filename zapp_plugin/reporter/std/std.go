@@ -1,24 +1,25 @@
-package std_output
+package std
 
 import (
 	"os"
 	"strings"
 	"time"
 
-	"github.com/zly-app/honey/component"
+	"github.com/zly-app/zapp/core"
+
 	"github.com/zly-app/honey/log_data"
-	"github.com/zly-app/honey/output"
+	"github.com/zly-app/honey/zapp_plugin/reporter"
 )
 
 var StdFormat = "[{dev}.{service}][{instance}][{time}] {level} {msg} {fields} {line} {trace_id}"
 var TimeFormat = "2006-01-02 15:04:05.999999"
 
-type StdOutput struct{}
+type StdReporter struct{}
 
-func (s *StdOutput) Start() error { return nil }
-func (s *StdOutput) Close() error { return nil }
+func (s *StdReporter) Start() error { return nil }
+func (s *StdReporter) Close() error { return nil }
 
-func (s *StdOutput) Out(env, service, instance string, data []*log_data.LogData) {
+func (s *StdReporter) Report(env, service, instance string, data []*log_data.LogData) {
 	for _, v := range data {
 		text := StdFormat
 		text = strings.ReplaceAll(text, "{dev}", env)
@@ -36,11 +37,10 @@ func (s *StdOutput) Out(env, service, instance string, data []*log_data.LogData)
 	}
 }
 
-// std输出设备名
-const StdOutputName = "std"
+const StdReporterName = "std"
 
 func init() {
-	output.RegistryOutputCreator(StdOutputName, func(c component.IComponent) output.IOutput {
-		return &StdOutput{}
+	reporter.RegisterReporterCreator(StdReporterName, func(app core.IApp) reporter.IReporter {
+		return &StdReporter{}
 	})
 }
