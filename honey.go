@@ -83,7 +83,6 @@ func (h *Honey) AfterExit() {
 	}
 
 	// 等待处理
-	time.Sleep(time.Second * 3)
 	h.rotateGPool.Wait()
 
 	// 关闭输出设备
