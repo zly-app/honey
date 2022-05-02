@@ -4,6 +4,7 @@ import (
 	"github.com/zly-app/zapp"
 
 	_ "github.com/zly-app/honey/input/http"
+	_ "github.com/zly-app/honey/output/honey-http"
 	_ "github.com/zly-app/honey/output/std"
 )
 

@@ -36,3 +36,9 @@ func GetSerializer(name string) ISerializer {
 	}
 	return c
 }
+
+// 尝试获取序列化器
+func TryGetSerializer(name string) (ISerializer, bool) {
+	c, ok := serializers[name]
+	return c, ok
+}

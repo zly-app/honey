@@ -9,15 +9,11 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/component"
-	"github.com/zly-app/honey/pkg/compress"
-	"github.com/zly-app/honey/pkg/serializer"
 )
 
 type HttpInput struct {
-	c          component.ILogCollector
-	api        *api.ApiService
-	compress   compress.ICompress
-	serializer serializer.ISerializer
+	c   component.ILogCollector
+	api *api.ApiService
 }
 
 func (h *HttpInput) Start() error {
@@ -38,9 +34,7 @@ func NewHttpInput(c component.ILogCollector, iConfig component.IInputConfig) *Ht
 		logger.Log.Fatal("获取http输入器配置失败", zap.Error(err))
 	}
 	h := &HttpInput{
-		c:          c,
-		compress:   compress.GetCompress(conf.Compress),
-		serializer: serializer.GetSerializer(conf.Serializer),
+		c: c,
 	}
 
 	apiConf := config.NewConfig()
@@ -53,7 +47,7 @@ func NewHttpInput(c component.ILogCollector, iConfig component.IInputConfig) *Ht
 	}
 	apiService := api.NewApiService(zapp.App(), apiConf, opts...)
 	apiService.RegistryRouter(func(c core.IComponent, router api.Party) {
-		router.Post(conf.ReportPath, api.Wrap(h.Receive))
+		router.Post(conf.PushPath, api.Wrap(h.Receive))
 	})
 	h.api = apiService
 

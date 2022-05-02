@@ -8,18 +8,18 @@
 #MaxRotateThreadNum = 10
 # 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
 Inputs = 'http'
-# 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std
+# 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http
 Outputs = 'std'
 
 # honey服务本身日志配置项
 [services.honey.ThisLog]
 # 关闭honey服务本身的日志收集
 #Disable = false
-# honey本身上报的环境名
+# honey本身输出的环境名
 Env = 'dev'
-# honey本身上报的服务名, 如果为空则使用app名
+# honey本身输出的服务名, 如果为空则使用app名
 #Service = ''
-# honey本身上报的实例名, 如果为空则使用本地ip
+# honey本身输出的实例名, 如果为空则使用本地ip
 #Instance = ''
 # 停止原有的日志输出, honey启动后不会输出日志到屏幕或原有的
 #StopLogOutput = true
@@ -30,16 +30,27 @@ Env = 'dev'
 #Disable = false
 # 监听地址, 示例: :8080
 #Bind = ':8080'
-# 上报路径
-#ReportPath = '/report'
+# 推送路径
+#PushPath = '/push'
 # post允许客户端传输最大数据大小, 单位字节
 #PostMaxMemory = 33554432
+# 验证token, 如何设置, 请求header必须带上 token={AuthToken}, 如 token=myAuthToken
+#AuthToken = ''
+
+# honey-http输出设备配置项
+[output.honey-http]
+# 关闭
+#Disable = false
+# push地址, 示例: http://127.0.0.1:8080/push
+#PushAddress = 'http://127.0.0.1:8080/push'
 # 压缩器名
 #Compress = 'zstd'
 # 序列化器名
 #Serializer = 'msgpack'
 # 验证token, 如何设置, 请求header必须带上 token={AuthToken}, 如 token=myAuthToken
 #AuthToken = ''
+# 请求超时, 单位秒
+#ReqTimeout = 5
 
 # app框架配置
 [frame]

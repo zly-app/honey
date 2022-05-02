@@ -36,3 +36,9 @@ func GetCompress(name string) ICompress {
 	}
 	return c
 }
+
+// 尝试获取压缩程序
+func TryGetCompress(name string) (ICompress, bool) {
+	c, ok := compresses[name]
+	return c, ok
+}

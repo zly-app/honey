@@ -7,6 +7,8 @@ import (
 	"github.com/zly-app/service/api"
 
 	"github.com/zly-app/honey/log_data"
+	"github.com/zly-app/honey/pkg/compress"
+	"github.com/zly-app/honey/pkg/serializer"
 )
 
 const (
@@ -34,14 +36,31 @@ func (h *HttpInput) Receive(ctx *api.Context) error {
 		instance = ctx.RemoteAddr()
 	}
 
+	// 获取压缩程序
+	compressName := ctx.GetHeader("Content-Encoding")
+	if compressName == "" {
+		compressName = compress.RawCompressName
+	}
+	cp, ok := compress.TryGetCompress(compressName)
+	if !ok {
+		return fmt.Errorf("不支持的压缩类型: %v", compressName)
+	}
+
+	// 获取序列化器
+	ct := ctx.GetHeader("Content-Type")
+	se, ok := serializer.TryGetSerializer(ct)
+	if !ok {
+		return fmt.Errorf("不支持的数据类型: %v", ct)
+	}
+
 	body := bytes.NewBuffer(nil)
-	err := h.compress.UnCompress(ctx.Request().Body, body)
+	err := cp.UnCompress(ctx.Request().Body, body)
 	if err != nil {
 		return fmt.Errorf("解压缩失败: %v", err)
 	}
 
 	logs := []*log_data.LogData{}
-	err = h.serializer.Unmarshal(body, &logs)
+	err = se.Unmarshal(body, &logs)
 	if err != nil {
 		return fmt.Errorf("解码失败: %v", err)
 	}

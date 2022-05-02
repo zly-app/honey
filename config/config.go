@@ -30,9 +30,9 @@ const (
 type Config struct {
 	ThisLog struct {
 		Disable       bool   // 关闭honey服务本身的日志收集
-		Env           string // honey本身上报的环境名
-		Service       string // honey本身上报的服务名, 如果为空则使用app名
-		Instance      string // honey本身上报的实例名, 如果为空则使用本地ip
+		Env           string // honey本身输出的环境名
+		Service       string // honey本身输出的服务名, 如果为空则使用app名
+		Instance      string // honey本身输出的实例名, 如果为空则使用本地ip
 		StopLogOutput bool   // 停止原有的日志输出, honey启动后不会输出日志到屏幕或原有的
 	} // honey服务本身的log处理文件
 
