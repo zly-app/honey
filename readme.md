@@ -20,7 +20,7 @@ honey是一个开源的基于 [zapp](https://github.com/zly-app/zapp) 的日志�
 
 ## compress
 
-压缩器, 目前支持 `raw`, `zstd`
+压缩器, 目前支持 `raw`, `gzip`, `zstd`
 
 ## serializer
 

@@ -17,6 +17,7 @@ type ICompress interface {
 var compresses = map[string]ICompress{
 	RawCompressName:  NewRawCompress(),
 	ZStdCompressName: NewZStdCompress(),
+	GzipCompressName: NewGzipCompress(),
 }
 
 // 注册压缩程序
