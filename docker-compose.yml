@@ -1,0 +1,14 @@
+version: "3"
+services:
+  honey:
+    # https://github.com/zly-app/honey
+    # https://hub.docker.com/zlyuan/honey
+    image: zlyuan/honey
+    container_name: honey
+    restart: unless-stopped
+    ports:
+      # http 输入器端口
+      - 8080:8080
+    volumes:
+      # 配置文件
+      - "./configs:/src/configs"

@@ -8,7 +8,7 @@
 #MaxRotateThreadNum = 10
 # 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
 Inputs = 'http'
-# 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http
+# 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http, loki-http
 Outputs = 'std'
 
 # honey服务本身日志配置项
