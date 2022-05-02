@@ -52,6 +52,17 @@ Env = 'dev'
 # 请求超时, 单位秒
 #ReqTimeout = 5
 
+# loki-http输出设备配置项
+[output.loki-http]
+# 关闭
+#Disable = false
+# push地址, 示例: http://127.0.0.1:3100/loki/api/v1/push
+#PushAddress = 'http://127.0.0.1:3100/loki/api/v1/push'
+# 是否启用压缩
+#EnableCompress = true
+# 请求超时, 单位秒
+#ReqTimeout = 5
+
 # app框架配置
 [frame]
 # debug标志
@@ -65,7 +76,7 @@ Env = 'dev'
 
 # 日志配置
 [frame.log]
-# 日志等级, debug, info, warn, error, dpanic, panic, fatal
+# 自身日志等级, debug, info, warn, error, dpanic, panic, fatal
 #Level = 'debug'
 # 启用json编码器, 输出的每一行日志转为json格式
 #Json = false

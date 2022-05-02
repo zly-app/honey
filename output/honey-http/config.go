@@ -1,13 +1,13 @@
 package http
 
 const (
-	// 默认Honey地址
+	// 默认push地址
 	defPushAddress = "http://127.0.0.1:8080/push"
 	// 默认压缩器名
 	defCompress = "zstd"
 	// 默认序列化器名
 	defaultSerializer = "msgpack"
-	// 默认输出超时
+	// 默认请求超时
 	defReqTimeout = 5
 )
 

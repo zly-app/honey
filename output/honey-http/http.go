@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/zly-app/service/api"
-	"github.com/zly-app/zapp"
 	"github.com/zly-app/zapp/logger"
 	"go.uber.org/zap"
 
@@ -63,7 +62,7 @@ func (h *HttpOutput) Out(env, service, instance string, data []*log_data.LogData
 	}
 
 	// 构建请求
-	ctx, cancel := context.WithTimeout(zapp.App().BaseContext(), time.Duration(h.conf.ReqTimeout)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(h.conf.ReqTimeout)*time.Second)
 	defer cancel()
 	req, err := http.NewRequestWithContext(ctx, "POST", h.conf.PushAddress, body)
 	if err != nil {

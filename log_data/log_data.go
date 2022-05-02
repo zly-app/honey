@@ -8,7 +8,7 @@ import (
 )
 
 type LogData struct {
-	T       int64  `json:"t"`                  // 微秒级时间戳
+	T       int64  `json:"t"`                  // 纳秒级时间戳
 	Level   string `json:"level"`              // 日志等级
 	Msg     string `json:"msg,omitempty"`      // 日志内容
 	Fields  string `json:"fields,omitempty"`   // 日志自定义数据
@@ -31,7 +31,7 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 	}
 
 	data := &LogData{
-		T:       ent.Time.UnixNano() / 1e3,
+		T:       ent.Time.UnixNano(),
 		Level:   ent.Level.String(),
 		Msg:     ent.Message,
 		Fields:  "",

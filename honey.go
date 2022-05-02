@@ -72,14 +72,22 @@ func (h *Honey) Close() error {
 	for _, r := range rotates {
 		r.Rotate()
 	}
+	return nil
+}
+
+func (h *Honey) AfterExit() {
+	// 立即旋转
+	rotates := h.rotateGroup.GetAllRotate()
+	for _, r := range rotates {
+		r.Rotate()
+	}
 
 	// 等待处理
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 3)
 	h.rotateGPool.Wait()
 
 	// 关闭输出设备
 	h.CloseOutput()
-	return nil
 }
 
 // 启用honey服务
