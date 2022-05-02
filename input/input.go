@@ -8,7 +8,7 @@ import (
 )
 
 // 输入设备建造者
-type InputCreator func(c component.IComponent) IInput
+type InputCreator func(c component.ILogCollector, iConfig component.IInputConfig) IInput
 
 // 输入设备
 type IInput interface {
@@ -27,10 +27,10 @@ func RegistryInputCreator(name string, rc InputCreator) {
 }
 
 // 生成输入设备
-func MakeInput(c component.IComponent, name string) IInput {
+func MakeInput(c component.ILogCollector, iConfig component.IInputConfig, name string) IInput {
 	ic, ok := inputCreators[name]
 	if !ok {
 		logger.Log.Fatal("试图构建未注册建造者的Input", zap.String("name", name))
 	}
-	return ic(c)
+	return ic(c, iConfig)
 }

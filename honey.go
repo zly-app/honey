@@ -9,7 +9,6 @@ import (
 	"github.com/zly-app/zapp/service"
 	"go.uber.org/zap"
 
-	"github.com/zly-app/honey/component"
 	"github.com/zly-app/honey/config"
 	"github.com/zly-app/honey/input"
 	"github.com/zly-app/honey/output"
@@ -20,7 +19,6 @@ const DefaultServiceType core.ServiceType = "honey"
 
 type Honey struct {
 	app   core.IApp
-	c     component.IComponent
 	conf  *config.Config // 配置
 	state int32          // 启动状态 0未启动, 1已启动
 
@@ -82,18 +80,6 @@ func (h *Honey) Close() error {
 	// 关闭输出设备
 	h.CloseOutput()
 	return nil
-}
-
-// 自定义component
-func (h *Honey) WithCustomComponent() zapp.Option {
-	return zapp.WithCustomComponent(func(app core.IApp) core.IComponent {
-		c := &component.Component{
-			IComponent:    app.GetComponent(),
-			ILogCollector: h,
-		}
-		h.c = c
-		return c
-	})
 }
 
 // 启用honey服务

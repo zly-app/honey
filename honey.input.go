@@ -19,9 +19,15 @@ func (h *Honey) MakeInput() {
 	names := strings.Split(h.conf.Inputs, ",")
 	h.inputs = make(map[string]input.IInput, len(names))
 	for i := range names {
-		in := input.MakeInput(h.c, names[i])
+		in := input.MakeInput(h, h, names[i])
 		h.inputs[names[i]] = in
 	}
+}
+
+// 解析输入设备配置数据到结构中
+func (h *Honey) ParseInputConf(name string, conf interface{}, ignoreNotSet ...bool) error {
+	key := fmt.Sprintf("input.%s", name)
+	return h.app.GetConfig().Parse(key, conf, ignoreNotSet...)
 }
 
 // 启动输入设备

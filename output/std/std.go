@@ -40,7 +40,7 @@ func (s *StdOutput) Out(env, service, instance string, data []*log_data.LogData)
 const StdOutputName = "std"
 
 func init() {
-	output.RegistryOutputCreator(StdOutputName, func(c component.IComponent) output.IOutput {
+	output.RegistryOutputCreator(StdOutputName, func(iConfig component.IOutputConfig) output.IOutput {
 		return &StdOutput{}
 	})
 }

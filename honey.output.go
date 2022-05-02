@@ -19,9 +19,15 @@ func (h *Honey) MakeOutput() {
 	names := strings.Split(h.conf.Outputs, ",")
 	h.outputs = make(map[string]output.IOutput, len(names))
 	for i := range names {
-		out := output.MakeOutput(h.c, names[i])
+		out := output.MakeOutput(h, names[i])
 		h.outputs[names[i]] = out
 	}
+}
+
+// 解析输出设备配置数据到结构中
+func (h *Honey) ParseOutputConf(name string, conf interface{}, ignoreNotSet ...bool) error {
+	key := fmt.Sprintf("output.%s", name)
+	return h.app.GetConfig().Parse(key, conf, ignoreNotSet...)
 }
 
 // 启动输出设备

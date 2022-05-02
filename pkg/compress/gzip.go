@@ -24,7 +24,7 @@ func (r *GzipCompress) UnCompress(in io.Reader, out io.Writer) error {
 		return err
 	}
 	_, err = io.Copy(out, read)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	return read.Close()

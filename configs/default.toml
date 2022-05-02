@@ -24,7 +24,7 @@ Env = 'dev'
 # 停止原有的日志输出, honey启动后不会输出日志到屏幕或原有的
 #StopLogOutput = true
 
-# http插件配置项
+# http输入器插件配置项
 [input.http]
 # 关闭
 #Disable = false

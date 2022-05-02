@@ -9,7 +9,7 @@ import (
 const HttpInputName = "http"
 
 func init() {
-	input.RegistryInputCreator(HttpInputName, func(c component.IComponent) input.IInput {
-		return NewHttpInput(c)
+	input.RegistryInputCreator(HttpInputName, func(c component.ILogCollector, ic component.IInputConfig) input.IInput {
+		return NewHttpInput(c, ic)
 	})
 }

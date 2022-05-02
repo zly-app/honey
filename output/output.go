@@ -9,7 +9,7 @@ import (
 )
 
 // 输出设备建造者
-type OutputCreator func(c component.IComponent) IOutput
+type OutputCreator func(iConfig component.IOutputConfig) IOutput
 
 // 输出设备
 type IOutput interface {
@@ -30,10 +30,10 @@ func RegistryOutputCreator(name string, oc OutputCreator) {
 }
 
 // 生成输出设备
-func MakeOutput(c component.IComponent, name string) IOutput {
+func MakeOutput(iConfig component.IOutputConfig, name string) IOutput {
 	oc, ok := outputCreators[name]
 	if !ok {
 		logger.Log.Fatal("试图构建未注册建造者的Output", zap.String("name", name))
 	}
-	return oc(c)
+	return oc(iConfig)
 }

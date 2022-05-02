@@ -3,7 +3,9 @@ package http
 import (
 	"github.com/zly-app/service/api"
 	"github.com/zly-app/service/api/config"
+	"github.com/zly-app/zapp"
 	"github.com/zly-app/zapp/core"
+	"github.com/zly-app/zapp/logger"
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/component"
@@ -12,7 +14,7 @@ import (
 )
 
 type HttpInput struct {
-	c          component.IComponent
+	c          component.ILogCollector
 	api        *api.ApiService
 	compress   compress.ICompress
 	serializer serializer.ISerializer
@@ -26,14 +28,14 @@ func (h *HttpInput) Close() error {
 	return h.api.Close()
 }
 
-func NewHttpInput(c component.IComponent) *HttpInput {
+func NewHttpInput(c component.ILogCollector, iConfig component.IInputConfig) *HttpInput {
 	conf := newConfig()
-	err := c.ParseInputConf(HttpInputName, conf, true)
+	err := iConfig.ParseInputConf(HttpInputName, conf, true)
 	if err == nil {
 		err = conf.Check()
 	}
 	if err != nil {
-		c.Fatal("获取http输入器配置失败", zap.Error(err))
+		logger.Log.Fatal("获取http输入器配置失败", zap.Error(err))
 	}
 	h := &HttpInput{
 		c:          c,
@@ -49,7 +51,7 @@ func NewHttpInput(c component.IComponent) *HttpInput {
 	opts := []api.Option{
 		api.WithMiddleware(AuthTokenMiddleware(conf.AuthToken)),
 	}
-	apiService := api.NewApiService(c.App(), apiConf, opts...)
+	apiService := api.NewApiService(zapp.App(), apiConf, opts...)
 	apiService.RegistryRouter(func(c core.IComponent, router api.Party) {
 		router.Post(conf.ReportPath, api.Wrap(h.Receive))
 	})

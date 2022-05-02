@@ -54,7 +54,7 @@ Inputs = 'http'
 # 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std
 Outputs = 'std'
 
-# http插件配置项
+# http输入器插件配置项
 [input.http]
 # 监听地址, 示例: :8080
 #Bind = ':8080'
