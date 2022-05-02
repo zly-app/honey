@@ -2,7 +2,6 @@ package main
 
 import (
 	"sync/atomic"
-	"time"
 
 	"github.com/zly-app/zapp"
 	"github.com/zly-app/zapp/core"
