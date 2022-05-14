@@ -29,7 +29,7 @@ func (s *Socks5Proxy) DialContext(ctx context.Context, network, address string) 
 }
 
 /*创建一个socks5代理
-  address 代理地址. 支持socks5, socks5h. 示例: socks5://127.0.0.1:8080
+  address 代理地址. 支持socks5, socks5h. 示例: socks5://127.0.0.1:1080
   user 用户名
   passwd 密码
 */

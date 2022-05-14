@@ -18,7 +18,7 @@ type Config struct {
 	Serializer   string // 序列化器名
 	AuthToken    string // 验证token, 如何设置, 请求header必须带上 token={AuthToken}, 如 token=myAuthToken
 	ReqTimeout   int    // 请求超时, 单位秒
-	ProxyAddress string // 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:8080
+	ProxyAddress string // 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080
 	ProxyUser    string // 代理用户名
 	ProxyPasswd  string // 代理用户密码
 }

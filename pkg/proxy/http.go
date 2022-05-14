@@ -26,7 +26,7 @@ func (h *HttpProxy) SetProxy(transport *http.Transport) {
 }
 
 /*创建一个http代理
-  address 代理地址. 支持 http, https, socks5, socks5h. 示例: https://127.0.0.1:8080
+  address 代理地址. 支持 http, https, socks5, socks5h. 示例: https://127.0.0.1:1080
   user 用户名
   passwd 密码
 */

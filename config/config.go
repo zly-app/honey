@@ -23,6 +23,8 @@ const (
 	// 默认最大旋转线程数
 	DefaultMaxRotateThreadNum = 10
 
+	// 默认输入设备列表
+	DefaultInputs = "http"
 	// 默认输出设备列表
 	DefaultOutputs = "std"
 )
@@ -45,7 +47,9 @@ type Config struct {
 }
 
 func NewConfig() *Config {
-	conf := &Config{}
+	conf := &Config{
+		Inputs: DefaultInputs,
+	}
 	conf.ThisLog.StopLogOutput = DefaultThisLogStopLogOutput
 	Conf = conf
 	return conf

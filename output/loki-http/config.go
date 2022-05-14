@@ -14,7 +14,7 @@ type Config struct {
 	PushAddress    string // push地址, 示例: http://127.0.0.1:3100/loki/api/v1/push
 	EnableCompress bool   // 是否启用压缩
 	ReqTimeout     int    // 请求超时, 单位秒
-	ProxyAddress   string // 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:8080
+	ProxyAddress   string // 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080
 	ProxyUser      string // 代理用户名
 	ProxyPasswd    string // 代理用户密码
 }

@@ -126,6 +126,7 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 		conf:       conf,
 		compress:   compress.GetCompress(conf.Compress),
 		serializer: serializer.GetSerializer(conf.Serializer),
+		client:     &http.Client{},
 	}
 
 	if conf.ProxyAddress != "" {
