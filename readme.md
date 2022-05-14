@@ -1,3 +1,26 @@
+
+<!-- TOC -->
+
+- [honey 是什么](#honey-是什么)
+- [关键概念](#关键概念)
+  - [zapp](#zapp)
+  - [input](#input)
+  - [output](#output)
+  - [compress](#compress)
+  - [serializer](#serializer)
+- [结构图](#结构图)
+- [架构图](#架构图)
+- [如何运行](#如何运行)
+  - [本地编译运行](#本地编译运行)
+  - [在 docker 运行](#在-docker-运行)
+  - [使用 docker-compose](#使用-docker-compose)
+- [配置](#配置)
+- [zapp日志收集插件](#zapp日志收集插件)
+
+<!-- /TOC -->
+
+---
+
 # honey 是什么
 
 honey是一个开源的基于 [zapp](https://github.com/zly-app/zapp) 的日志收集处理工具. 目的是收集任何基于 `zapp` 开发的项目的日志并转储到任何地方.
