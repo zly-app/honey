@@ -51,6 +51,12 @@ Env = 'dev'
 #AuthToken = ''
 # 请求超时, 单位秒
 #ReqTimeout = 5
+# 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:8080
+#ProxyAddress = ''
+# 代理用户名
+#ProxyUser = ''
+# 代理用户密码
+#ProxyPasswd = ''
 
 # loki-http输出设备配置项
 [output.loki-http]
@@ -62,6 +68,12 @@ Env = 'dev'
 #EnableCompress = true
 # 请求超时, 单位秒
 #ReqTimeout = 5
+# 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:8080
+#ProxyAddress = ''
+# 代理用户名
+#ProxyUser = ''
+# 代理用户密码
+#ProxyPasswd = ''
 
 # app框架配置
 [frame]

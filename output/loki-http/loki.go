@@ -17,10 +17,12 @@ import (
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/output"
 	"github.com/zly-app/honey/pkg/compress"
+	"github.com/zly-app/honey/pkg/proxy"
 )
 
 type HttpOutput struct {
-	conf *Config
+	conf   *Config
+	client *http.Client
 }
 
 func (h *HttpOutput) Start() error { return nil }
@@ -67,7 +69,7 @@ func (h *HttpOutput) Out(env, app, instance string, data []*log_data.LogData) {
 	req.Header.Add("Content-Type", "application/json")
 
 	// 请求
-	rsp, err := http.DefaultClient.Do(req)
+	rsp, err := h.client.Do(req)
 	if err != nil {
 		_, _ = os.Stderr.WriteString(fmt.Sprintf("上报失败, 请求失败: err:%v\n", err))
 		return
@@ -94,8 +96,20 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 	}
 
 	h := &HttpOutput{
-		conf: conf,
+		conf:   conf,
+		client: &http.Client{},
 	}
+
+	if conf.ProxyAddress != "" {
+		p, err := proxy.NewHttpProxy(conf.ProxyAddress, conf.ProxyUser, conf.ProxyPasswd)
+		if err != nil {
+			logger.Log.Fatal("创建loki-http代理失败", zap.Error(err))
+		}
+		transport := &http.Transport{}
+		p.SetProxy(transport)
+		h.client.Transport = transport
+	}
+
 	return h
 }
 
