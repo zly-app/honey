@@ -51,13 +51,13 @@ func (h *Honey) isStart() bool {
 }
 
 func (h *Honey) Start() error {
-	atomic.StoreInt32(&h.state, 1)
 	// 启动输入设备
 	h.MakeInput()
 	h.StartInput()
 	// 启动输出设备
 	h.MakeOutput()
 	h.StartOutput()
+	atomic.StoreInt32(&h.state, 1)
 	return nil
 }
 
