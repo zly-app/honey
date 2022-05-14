@@ -384,6 +384,8 @@ github.com/zly-app/service/api v0.0.0-20220430055931-779fb32fc812 h1:3ULBQicxfHK
 github.com/zly-app/service/api v0.0.0-20220430055931-779fb32fc812/go.mod h1:XL0rAOnzZR5WDQqLiiUeKdLUXmEM5VjJBEPXdcIx8yg=
 github.com/zly-app/zapp v1.1.9 h1:AUaenWhKPgddFcxDxWMrxXsopaOAu2WVFQ/ITKl7vZQ=
 github.com/zly-app/zapp v1.1.9/go.mod h1:MszpwW6QqAhZZRAKo9UtzT4eaYXkyCMpGuRKBsHFYbw=
+github.com/zlyuancn/zretry v0.0.0-20220514032503-d78bfd22a441 h1:Sw0KI54iN5+zLL74vWx9R1o9S1yWc+f3oRKOjKrMCqA=
+github.com/zlyuancn/zretry v0.0.0-20220514032503-d78bfd22a441/go.mod h1:nXpt3JELMAirMyc5KExlSX96ixpohjHkxHpJlhqRnUU=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
