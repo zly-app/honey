@@ -7,7 +7,7 @@ import (
 // 日志收集器
 type ILogCollector interface {
 	// 收集
-	Collect(env, service, instance string, log []*log_data.LogData)
+	Collect(env, app, instance string, log []*log_data.LogData)
 }
 
 // 输入器配置

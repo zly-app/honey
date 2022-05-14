@@ -14,8 +14,8 @@ import (
 const (
 	// 如何从header中获取env
 	HeaderNameEnv = "env"
-	// 如何从header中获取service
-	HeaderNameService = "service"
+	// 如何从header中获取app
+	HeaderNameApp = "app"
 	// 如何从header中获取instance
 	HeaderNameInstance = "instance"
 )
@@ -23,14 +23,14 @@ const (
 // 接收
 func (h *HttpInput) Receive(ctx *api.Context) error {
 	env := ctx.GetHeader(HeaderNameEnv)
-	service := ctx.GetHeader(HeaderNameService)
+	app := ctx.GetHeader(HeaderNameApp)
 	instance := ctx.GetHeader(HeaderNameInstance)
 
 	if env == "" {
 		return fmt.Errorf("env为空")
 	}
-	if service == "" {
-		return fmt.Errorf("service为空")
+	if app == "" {
+		return fmt.Errorf("app为空")
 	}
 	if instance == "" {
 		instance = ctx.RemoteAddr()
@@ -66,7 +66,7 @@ func (h *HttpInput) Receive(ctx *api.Context) error {
 	}
 
 	if len(logs) > 0 {
-		h.c.Collect(env, service, instance, logs)
+		h.c.Collect(env, app, instance, logs)
 	}
 
 	return nil

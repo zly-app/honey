@@ -27,12 +27,12 @@ func (h *HttpOutput) Start() error { return nil }
 
 func (h *HttpOutput) Close() error { return nil }
 
-func (h *HttpOutput) Out(env, service, instance string, data []*log_data.LogData) {
+func (h *HttpOutput) Out(env, app, instance string, data []*log_data.LogData) {
 	if h.conf.Disable {
 		return
 	}
 
-	lokiData := MakeLokiBody(env, service, instance, data)
+	lokiData := MakeLokiBody(env, app, instance, data)
 
 	// 序列化
 	body := bytes.NewBuffer(nil)

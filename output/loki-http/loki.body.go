@@ -17,7 +17,7 @@ type LokiBody struct {
 	Streams []*LokiStreamBody `json:"streams"`
 }
 
-func MakeLokiBody(env, service, instance string, data []*log_data.LogData) *LokiBody {
+func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody {
 	streams := make([]*LokiStreamBody, len(data))
 	for i, v := range data {
 		msg := map[string]string{
@@ -30,7 +30,7 @@ func MakeLokiBody(env, service, instance string, data []*log_data.LogData) *Loki
 		streamBody := &LokiStreamBody{
 			Stream: map[string]string{
 				"env":      env,
-				"service":  service,
+				"app":      app,
 				"instance": instance,
 				"level":    strings.ToLower(v.Level),
 			},

@@ -31,7 +31,7 @@ type Config struct {
 	ThisLog struct {
 		Disable       bool   // 关闭honey服务本身的日志收集
 		Env           string // honey本身输出的环境名
-		Service       string // honey本身输出的服务名, 如果为空则使用app名
+		App           string // honey本身输出的app名, 如果为空则使用默认名
 		Instance      string // honey本身输出的实例名, 如果为空则使用本地ip
 		StopLogOutput bool   // 停止原有的日志输出, honey启动后不会输出日志到屏幕或原有的
 	} // honey服务本身的log处理文件
@@ -55,8 +55,8 @@ func (conf *Config) Check() error {
 	if conf.ThisLog.Env == "" {
 		conf.ThisLog.Env = DefaultThisLogEnv
 	}
-	if conf.ThisLog.Service == "" {
-		conf.ThisLog.Service = zapp.App().Name()
+	if conf.ThisLog.App == "" {
+		conf.ThisLog.App = zapp.App().Name()
 	}
 	if conf.ThisLog.Instance == "" {
 		conf.ThisLog.Instance = utils.GetInstance(DefaultThisLogInstance)

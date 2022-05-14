@@ -24,8 +24,8 @@ import (
 const (
 	// 如何从header中设置env
 	HeaderNameEnv = "env"
-	// 如何从header中设置service
-	HeaderNameService = "service"
+	// 如何从header中设置app
+	HeaderNameApp = "app"
 	// 如何从header中设置instance
 	HeaderNameInstance = "instance"
 )
@@ -40,7 +40,7 @@ func (h *HttpOutput) Start() error { return nil }
 
 func (h *HttpOutput) Close() error { return nil }
 
-func (h *HttpOutput) Out(env, service, instance string, data []*log_data.LogData) {
+func (h *HttpOutput) Out(env, app, instance string, data []*log_data.LogData) {
 	if h.conf.Disable {
 		return
 	}
@@ -75,7 +75,7 @@ func (h *HttpOutput) Out(env, service, instance string, data []*log_data.LogData
 		req.Header.Add("token", h.conf.AuthToken)
 	}
 	req.Header.Add(HeaderNameEnv, env)
-	req.Header.Add(HeaderNameService, service)
+	req.Header.Add(HeaderNameApp, app)
 	req.Header.Add(HeaderNameInstance, instance)
 
 	// 请求

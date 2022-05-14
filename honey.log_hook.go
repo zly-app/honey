@@ -16,7 +16,7 @@ func (h *Honey) logInterceptorFunc(ent *zapcore.Entry, fields []zapcore.Field) (
 	}
 
 	log := log_data.MakeLogData(ent, fields)
-	h.Collect(conf.Env, conf.Service, conf.Instance, []*log_data.LogData{log})
+	h.Collect(conf.Env, conf.App, conf.Instance, []*log_data.LogData{log})
 	return conf.StopLogOutput && h.isStart() // 设置了拦截并且在服务启动后才允许拦截
 }
 
