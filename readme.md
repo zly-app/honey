@@ -36,7 +36,26 @@ honey是一个开源的基于 [zapp](https://github.com/zly-app/zapp) 的日志�
 
 # 如何运行
 
-`go run .`
+## 本地编译运行
+
+```sh
+git clone https://github.com/zly-app/honey.git
+cd honey
+go run .
+```
+
+## 在 docker 运行
+
+```sh
+docker run zlyuan/honey:v0.2.0
+```
+
+## 使用 docker-compose
+
+```sh
+wget https://github.com/zly-app/honey/blob/master/docker-compose.yml
+docker-compose up -d
+```
 
 # 配置
 
