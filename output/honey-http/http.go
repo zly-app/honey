@@ -12,6 +12,7 @@ import (
 
 	"github.com/zly-app/service/api"
 	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/pkg/utils"
 	"github.com/zlyuancn/zretry"
 	"go.uber.org/zap"
 
@@ -19,7 +20,6 @@ import (
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/output"
 	"github.com/zly-app/honey/pkg/compress"
-	"github.com/zly-app/honey/pkg/proxy"
 	"github.com/zly-app/honey/pkg/serializer"
 )
 
@@ -136,7 +136,7 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 	}
 
 	if conf.ProxyAddress != "" {
-		p, err := proxy.NewHttpProxy(conf.ProxyAddress, conf.ProxyUser, conf.ProxyPasswd)
+		p, err := utils.NewHttpProxy(conf.ProxyAddress)
 		if err != nil {
 			logger.Log.Fatal("创建loki-http代理失败", zap.Error(err))
 		}

@@ -11,6 +11,7 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/pkg/utils"
 	"go.uber.org/zap"
 
 	"github.com/zlyuancn/zretry"
@@ -19,7 +20,6 @@ import (
 	"github.com/zly-app/honey/log_data"
 	"github.com/zly-app/honey/output"
 	"github.com/zly-app/honey/pkg/compress"
-	"github.com/zly-app/honey/pkg/proxy"
 )
 
 type HttpOutput struct {
@@ -109,7 +109,7 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 	}
 
 	if conf.ProxyAddress != "" {
-		p, err := proxy.NewHttpProxy(conf.ProxyAddress, conf.ProxyUser, conf.ProxyPasswd)
+		p, err := utils.NewHttpProxy(conf.ProxyAddress)
 		if err != nil {
 			logger.Log.Fatal("创建loki-http代理失败", zap.Error(err))
 		}
