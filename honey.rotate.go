@@ -92,7 +92,7 @@ func (h *Honey) rotateCreator(env, app, instance string) rotate.IRotator {
 		h.rotateGPool.Go(func() error {
 			h.RotateCallback(env, app, instance, values)
 			return nil
-		})
+		}, nil)
 	}
 	return rotate.NewRotate(callback, opts...)
 }
