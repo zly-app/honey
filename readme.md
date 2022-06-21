@@ -82,26 +82,22 @@ docker-compose up -d
 
 # 配置
 
-默认配置文件路径 `./configs/default.toml`, 默认配置文件可以不存在. 使用 `-c` 以指定配置文件启动, 此时配置文件必须存在.
+默认配置文件路径 `./configs/default.yaml`, 默认配置文件可以不存在. 使用 `-c` 以指定配置文件启动, 此时配置文件必须存在.
 
 详细配置文件书写参考[这里](./configs/default.toml)
 
 示例:
 
-```toml
-# honey配置项
-[services.honey]
-# 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
-Inputs = 'http'
-# 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http, loki-http
-Outputs = 'std'
+```yaml
+services: # 服务配置
+  honey: # honey服务
+    Inputs: http # 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
+    Outputs: std # 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http, loki-http
 
-# http输入器插件配置项
-[input.http]
-# 监听地址, 示例: :8080
-#Bind = ':8080'
-# 推送
-#PushPath = '/path'
+input: # honey 输入器
+  http: # http 输入器
+    #Bind: :8080 # 监听地址, 示例: :8080
+    #PushPath: /push # 推送路径
 ```
 
 # zapp日志收集插件

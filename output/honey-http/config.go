@@ -20,7 +20,7 @@ type Config struct {
 	PushAddress     string // push地址, 示例: http://127.0.0.1:8080/push
 	Compress        string // 压缩器名
 	Serializer      string // 序列化器名
-	AuthToken       string // 验证token, 如何设置, 请求header必须带上 token={AuthToken}, 如 token=myAuthToken
+	AuthToken       string // 验证token, 如果设置, 客户端请求header必须带上 token={AuthToken}, 如 token=myAuthToken
 	ReqTimeout      int    // 请求超时, 单位秒
 	RetryCount      int    // 请求失败重试次数, 0表示禁用
 	RetryIntervalMs int    // 请求失败重试间隔毫秒数

@@ -1,0 +1,70 @@
+services: # 服务配置
+  honey: # honey服务
+    #LogBatchSize: 10000 # 日志批次大小, 累计达到这个大小立即写入一次日志, 不用等待时间
+    #AutoRotateTime: 5 # 自动旋转时间(秒), 如果没有达到累计写入批次大小, 在指定时间后也会立即写入
+    #MaxRotateThreadNum: 10 # 最大旋转线程数, 表示同时允许多少批次发送到输出设备
+    Inputs: http # 输入设备列表, 多个输入设备用半角逗号`,`分隔, 目前支持的输入设备: http
+    Outputs: std # 输出设备列表, 多个输出设备用半角逗号`,`分隔, 目前支持的输出设备: std, honey-http, loki-http
+    ThisLog: # honey服务本身日志配置项
+      #Disable: false # 关闭honey服务本身的日志收集
+      Env: dev # honey本身输出的环境名
+      #App: '' # honey本身输出的app名, 如果为空则使用默认名
+      #Instance: '' # honey本身输出的实例名, 如果为空则使用本地ip
+      #StopLogOutput: true # 停止原有的日志输出, honey启动后不会输出日志到屏幕或原有的
+
+input: # honey 输入器
+  http: # http 输入器
+    #Disable: false # 是否关闭
+    #Bind: :8080 # 监听地址, 示例: :8080
+    #PushPath: /push # 推送路径
+    #PostMaxMemory: 33554432 # post允许客户端传输最大数据大小, 单位字节
+    #AuthToken: '' # 验证token, 如果设置, 客户端请求header必须带上 token={AuthToken}, 如 token=myAuthToken
+
+output: # honey 输出器
+  honey-http: # honey-http 输出器
+    #Disable: false # 是否关闭
+    #PushAddress: http://127.0.0.1:8080/push # push地址, 示例: http://127.0.0.1:8080/push
+    #Compress: zstd # 压缩器名, 可选 raw, gzip, zstd
+    #Serializer: msgpack # 序列化器名, 可选 msgpack, json
+    #AuthToken: '' # 验证token, 如果设置, 客户端请求header必须带上 token={AuthToken}, 如 token=myAuthToken
+    #ReqTimeout: 5 # 请求超时, 单位秒
+    #RetryCount: 2 # 请求失败重试次数, 0表示禁用
+    #RetryIntervalMs: 2000 # 请求失败重试间隔毫秒数
+    #ProxyAddress = '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
+  loki-http: # loki-http 输出器
+    #Disable: false # 是否关闭
+    #PushAddress = 'http://127.0.0.1:3100/loki/api/v1/push' # push地址, 示例: http://127.0.0.1:3100/loki/api/v1/push
+    #EnableCompress = true # 是否启用压缩
+    #ReqTimeout = 5 # 请求超时, 单位秒
+    #RetryCount = 2 # 请求失败重试次数, 0表示禁用
+    #RetryIntervalMs = 2000 # 请求失败重试间隔毫秒数
+    #ProxyAddress = '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
+
+frame: # 框架配置
+  #debug: true # debug标志
+  #Name: '' # app名
+  #FreeMemoryInterval: 120000 # 主动清理内存间隔时间(毫秒), <= 0 表示禁用
+  #WaitServiceRunTime: 1000 # 默认等待服务启动阶段, 等待时间(毫秒), 如果时间到未收到服务启动成功信号则将服务标记为不稳定状态然后继续开始工作(我们总不能一直等着吧)
+  #ServiceUnstableObserveTime: 10000 # 默认服务不稳定观察时间, 等待时间(毫秒), 如果时间到仍未收到服务启动成功信号也将服务标记为启动成功
+  #Flags: [] # flag, 注意: flag是忽略大小写的
+  #Labels: # 标签, 注意: 标签名是忽略大小写的
+  #Foo: Bar
+  #Log: # 日志配置
+    #Level: 'debug' # 日志等级, debug, info, warn, error, dpanic, panic, fatal
+    #Json: false # 启用json编码器, 输出的每一行日志转为json格式
+    #WriteToStream: true # 输出到屏幕
+    #WriteToFile: false # 日志是否输出到文件
+    #Name: '' # 日志文件名, 末尾会自动附加 .log 后缀
+    #AppendPid: false # 是否在日志文件名后附加进程号
+    #Path: './log' # 默认日志存放路径
+    #FileMaxSize: 32 # 每个日志最大尺寸,单位M
+    #FileMaxBackupsNum: 3 # 日志文件最多保存多少个备份, 0表示永久
+    #FileMaxDurableTime: 7 # 文件最多保存多长时间,单位天, 0表示永久
+    #Compress: false # 是否压缩历史日志
+    #TimeFormat: '2006-01-02 15:04:05' # 时间显示格式
+    #Color: true # 是否打印彩色日志等级, 只有关闭json编码器才生效
+    #CapitalLevel: false # 是否大写日志等级
+    #DevelopmentMode: true # 开发者模式, 在开发者模式下日志记录器在写完DPanic消息后程序会感到恐慌
+    #ShowFileAndLinenum: true # 显示文件路径和行号
+    #ShowFileAndLinenumMinLevel: 'warn' # 最小显示文件路径和行号的等级
+    #MillisDuration: true # 对zap.Duration转为毫秒

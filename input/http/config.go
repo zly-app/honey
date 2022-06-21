@@ -17,7 +17,7 @@ type Config struct {
 	PushPath      string // 推送路径
 	PostMaxMemory int64  // post允许客户端传输最大数据大小, 单位字节
 	Serializer    string // 序列化器名
-	AuthToken     string // 验证token, 如何设置, 请求header必须带上 token={AuthToken}, 如 token=myAuthToken
+	AuthToken     string // 验证token, 如果设置, 客户端请求header必须带上 token={AuthToken}, 如 token=myAuthToken
 }
 
 func newConfig() *Config {

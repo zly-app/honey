@@ -8,7 +8,7 @@ FROM scratch
 COPY --from=builder /src/honey /src/honey
 COPY --from=builder /src/configs /src/configs
 WORKDIR /src
-CMD ["./honey", "-c", "./configs/default.toml"]
+CMD ["./honey", "-c", "./configs/default.yaml"]
 
 EXPOSE 8080
 
