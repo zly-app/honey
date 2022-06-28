@@ -84,7 +84,7 @@ docker-compose up -d
 
 默认配置文件路径 `./configs/default.yaml`, 默认配置文件可以不存在. 使用 `-c` 以指定配置文件启动, 此时配置文件必须存在.
 
-详细配置文件书写参考[这里](./configs/default.toml)
+详细配置文件书写参考[这里](./configs/default.yaml)
 
 示例:
 
