@@ -30,15 +30,15 @@ output: # honey 输出器
     #ReqTimeout: 5 # 请求超时, 单位秒
     #RetryCount: 2 # 请求失败重试次数, 0表示禁用
     #RetryIntervalMs: 2000 # 请求失败重试间隔毫秒数
-    #ProxyAddress = '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
+    #ProxyAddress: '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
   loki-http: # loki-http 输出器
     #Disable: false # 是否关闭
-    #PushAddress = 'http://127.0.0.1:3100/loki/api/v1/push' # push地址, 示例: http://127.0.0.1:3100/loki/api/v1/push
-    #EnableCompress = true # 是否启用压缩
-    #ReqTimeout = 5 # 请求超时, 单位秒
-    #RetryCount = 2 # 请求失败重试次数, 0表示禁用
-    #RetryIntervalMs = 2000 # 请求失败重试间隔毫秒数
-    #ProxyAddress = '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
+    #PushAddress: 'http://127.0.0.1:3100/loki/api/v1/push' # push地址, 示例: http://127.0.0.1:3100/loki/api/v1/push
+    #EnableCompress: true # 是否启用压缩
+    #ReqTimeout: 5 # 请求超时, 单位秒
+    #RetryCount: 2 # 请求失败重试次数, 0表示禁用
+    #RetryIntervalMs: 2000 # 请求失败重试间隔毫秒数
+    #ProxyAddress: '' # 代理地址. 支持 http, https, socks5, socks5h. 示例: socks5://127.0.0.1:1080 socks5://user:pwd@127.0.0.1:1080
 
 frame: # 框架配置
   #debug: true # debug标志
