@@ -40,7 +40,7 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 	}
 
 	// 序列化fields
-	if len(enc.Fields) > 1 {
+	if len(enc.Fields) > 0 {
 		var fieldsBuff bytes.Buffer
 		for k, v := range enc.Fields {
 			fieldsBuff.WriteByte(',')
