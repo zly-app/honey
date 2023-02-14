@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	jsoniter "github.com/json-iterator/go"
+	"github.com/spf13/cast"
 
 	"github.com/zly-app/honey/log_data"
 )
@@ -21,10 +22,10 @@ func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody
 	streams := make([]*LokiStreamBody, len(data))
 	for i, v := range data {
 		msg := map[string]string{
-			"msg":      v.Msg,
-			"fields":   v.Fields,
-			"line":     v.Line,
-			"trace_id": v.TraceID,
+			"msg":    v.Msg,
+			"fields": v.Fields,
+			"line":   v.Line,
+			"tsNs":   cast.ToString(v.T),
 		}
 		msgData, _ := jsoniter.ConfigCompatibleWithStandardLibrary.MarshalToString(msg)
 		streamBody := &LokiStreamBody{
@@ -33,6 +34,7 @@ func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody
 				"app":      app,
 				"instance": instance,
 				"level":    strings.ToLower(v.Level),
+				"traceID":  v.TraceID,
 			},
 			Values: [][]string{
 				{strconv.FormatInt(v.T, 10), msgData},
