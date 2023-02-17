@@ -10,7 +10,7 @@ import (
 	"github.com/zly-app/honey/output"
 )
 
-var StdFormat = "[{dev}.{app}][{instance}][{time}] {level} {msg} {fields} {line} {traceID} {spanID}"
+var StdFormat = "[{env}.{app}][{instance}][{time}] {level} {msg} line={line} fields={fields} traceID={traceID} spanID={spanID}"
 var TimeFormat = "2006-01-02 15:04:05.999999"
 
 type StdOutput struct{}
@@ -21,7 +21,7 @@ func (s *StdOutput) Close() error { return nil }
 func (s *StdOutput) Out(env, app, instance string, data []*log_data.LogData) {
 	for _, v := range data {
 		text := StdFormat
-		text = strings.ReplaceAll(text, "{dev}", env)
+		text = strings.ReplaceAll(text, "{env}", env)
 		text = strings.ReplaceAll(text, "{app}", app)
 		text = strings.ReplaceAll(text, "{instance}", instance)
 		text = strings.ReplaceAll(text, "{time}", time.Unix(0, v.T).Format(TimeFormat))
