@@ -27,6 +27,7 @@ func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody
 			"line":    v.Line,
 			"tsNs":    cast.ToString(v.T),
 			"traceID": v.TraceID,
+			"spanID":  v.SpanID,
 		}
 		msgData, _ := jsoniter.ConfigCompatibleWithStandardLibrary.MarshalToString(msg)
 		streamBody := &LokiStreamBody{

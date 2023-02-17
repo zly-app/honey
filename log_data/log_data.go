@@ -8,12 +8,13 @@ import (
 )
 
 type LogData struct {
-	T       int64  `json:"t"`                  // 纳秒级时间戳
-	Level   string `json:"level"`              // 日志等级
-	Msg     string `json:"msg,omitempty"`      // 日志内容
-	Fields  string `json:"fields,omitempty"`   // 日志自定义数据
-	Line    string `json:"line,omitempty"`     // 日志所在行
-	TraceID string `json:"trace_id,omitempty"` // 链路id
+	T       int64  `json:"t"`                // 纳秒级时间戳
+	Level   string `json:"level"`            // 日志等级
+	Msg     string `json:"msg,omitempty"`    // 日志内容
+	Fields  string `json:"fields,omitempty"` // 日志自定义数据
+	Line    string `json:"line,omitempty"`   // 日志所在行
+	TraceID string `json:"traceID,omitempty"`
+	SpanID  string `json:"spanID,omitempty"`
 }
 
 func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
@@ -29,6 +30,12 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 		traceID = fmt.Sprint(v)
 		delete(enc.Fields, "traceID")
 	}
+	// 提取spanID
+	spanID := ""
+	if v, ok := enc.Fields["spanID"]; ok {
+		spanID = fmt.Sprint(v)
+		delete(enc.Fields, "spanID")
+	}
 
 	data := &LogData{
 		T:       ent.Time.UnixNano(),
@@ -37,6 +44,7 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 		Fields:  "",
 		Line:    fmt.Sprintf("%s:%d,%s", ent.Caller.File, ent.Caller.Line, ent.Caller.Function),
 		TraceID: traceID,
+		SpanID:  spanID,
 	}
 
 	// 序列化fields
