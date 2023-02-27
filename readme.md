@@ -70,7 +70,7 @@ go run .
 ## 在 docker 运行
 
 ```sh
-docker run zlyuan/honey:v0.2.3
+docker run zlyuan/honey:latest
 ```
 
 ## 使用 docker-compose

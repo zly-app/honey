@@ -3,7 +3,7 @@ services:
   honey:
     # https://github.com/zly-app/honey
     # https://hub.docker.com/r/zlyuan/honey
-    image: zlyuan/honey:v0.2.3
+    image: zlyuan/honey:latest
     container_name: honey
     restart: unless-stopped
     ports:
