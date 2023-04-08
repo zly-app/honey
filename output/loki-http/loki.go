@@ -3,6 +3,8 @@ package http
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io"
 	"net/http"
@@ -107,16 +109,24 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 		conf:   conf,
 		client: &http.Client{},
 	}
+	transport := &http.Transport{
+		MaxIdleConns:        5,                // 最大连接数
+		MaxIdleConnsPerHost: 2,                // 最大空闲连接数
+		IdleConnTimeout:     time.Second * 30, // 空闲连接在关闭自己之前保持空闲的最大时间
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true, // 跳过tls校验
+			RootCAs:            x509.NewCertPool(),
+		},
+	}
 
 	if conf.ProxyAddress != "" {
 		p, err := utils.NewHttpProxy(conf.ProxyAddress)
 		if err != nil {
 			logger.Log.Fatal("创建loki-http代理失败", zap.Error(err))
 		}
-		transport := &http.Transport{}
 		p.SetProxy(transport)
-		h.client.Transport = transport
 	}
+	h.client.Transport = transport
 
 	return h
 }
