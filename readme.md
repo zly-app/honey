@@ -16,6 +16,9 @@
   - [使用 docker-compose](#使用-docker-compose)
 - [配置](#配置)
 - [zapp日志收集插件](#zapp日志收集插件)
+- [Grafana接入](#grafana接入)
+  - [在`Loki`上配置trace跳转.](#在loki上配置trace跳转)
+  - [在`Tempo`上配置log跳转.](#在tempo上配置log跳转)
 
 <!-- /TOC -->
 
@@ -103,3 +106,38 @@ input: # honey 输入器
 # zapp日志收集插件
 
 转到 [这里](https://github.com/zly-app/plugin/tree/master/honey)
+
+# Grafana接入
+
+`Grafana`本身和`honey`没有什么关系, `honey`将数据存储到`Loki`, 然后`Grafana`使用`Loki`的数据进行可视化.
+
+首先需要在`Grafana`上配置好`Loki`和`Tempo`的数据源
+
+![数据源](./assets/grafana.datasources.png)
+
+## 在`Loki`上配置trace跳转.
+
+进入`Loki`数据源配置, 在 `Derived fields` 下增加一个导出字段.
+
+`Name` 为 `traceID`.
+`Regex` 为 `traceID=([0-9a-fA-F]*)`.
+`Query` 为 `${__value.raw}`
+`URL Label` 为 `转到trace`
+`Internal Link` 启用并设为 `Tempo`
+
+![Loki配置](./assets/grafana.loki.config.png)
+
+最终日志数据会得到一个`转到trace`的按钮, 点击他会跳转到`Tempo`的当前traceID
+
+![Loki数据](./assets/grafana.loki.data.png)
+
+## 在`Tempo`上配置log跳转.
+
+进入 `Tempo`数据源配置, 在`Trace to logs`下修改配置类似下图
+
+![Tempo配置](./assets/grafana.tempo.config.png)
+
+最终trace数据会得到一个`Logs for this span`的按钮, 点击他会跳转到`Loki`的当前traceID日志
+
+![Tempo数据](./assets/grafana.tempo.data.png)
+
