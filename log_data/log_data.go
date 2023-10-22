@@ -3,6 +3,7 @@ package log_data
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 
 	"go.uber.org/zap/zapcore"
 )
@@ -13,8 +14,12 @@ type LogData struct {
 	Msg     string `json:"msg,omitempty"`    // 日志内容
 	Fields  string `json:"fields,omitempty"` // 日志自定义数据
 	Line    string `json:"line,omitempty"`   // 日志所在行
+	Func    string `json:"func,omitempty"`   // 函数名
 	TraceID string `json:"traceID,omitempty"`
 	SpanID  string `json:"spanID,omitempty"`
+
+	Req string `json:"Req,omitempty"`
+	Rsp string `json:"Rsp,omitempty"`
 }
 
 func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
@@ -37,14 +42,28 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 		delete(enc.Fields, "spanID")
 	}
 
+	req := ""
+	if v, ok := enc.Fields["req"]; ok {
+		req = fmt.Sprint(v)
+		delete(enc.Fields, "req")
+	}
+	rsp := ""
+	if v, ok := enc.Fields["rsp"]; ok {
+		rsp = fmt.Sprint(v)
+		delete(enc.Fields, "rsp")
+	}
+
 	data := &LogData{
 		T:       ent.Time.UnixNano(),
 		Level:   ent.Level.String(),
 		Msg:     ent.Message,
 		Fields:  "",
-		Line:    fmt.Sprintf("%s:%d,%s", ent.Caller.File, ent.Caller.Line, ent.Caller.Function),
+		Line:    ent.Caller.File + ":" + strconv.Itoa(ent.Caller.Line),
+		Func:    ent.Caller.Function,
 		TraceID: traceID,
 		SpanID:  spanID,
+		Req:     req,
+		Rsp:     rsp,
 	}
 
 	// 序列化fields
