@@ -2,9 +2,9 @@ package log_data
 
 import (
 	"bytes"
-	"fmt"
 	"strconv"
 
+	"github.com/spf13/cast"
 	"go.uber.org/zap/zapcore"
 )
 
@@ -18,6 +18,14 @@ type LogData struct {
 	TraceID string `json:"traceID,omitempty"`
 	SpanID  string `json:"spanID,omitempty"`
 
+	Duration      int64  `json:"duration,omitempty"` // 持续时间, 纳秒
+	Code          int64  `json:"code,omitempty"`     // Code
+	CodeType      string `json:"codeType,omitempty"` // CodeType
+	CallerService string `json:"callerService,omitempty"`
+	CallerMethod  string `json:"callerMethod,omitempty"`
+	CalleeService string `json:"calleeService,omitempty"`
+	CalleeMethod  string `json:"calleeMethod,omitempty"`
+
 	Req string `json:"Req,omitempty"`
 	Rsp string `json:"Rsp,omitempty"`
 }
@@ -29,41 +37,64 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 		fields[i].AddTo(enc)
 	}
 
+	data := &LogData{
+		T:      ent.Time.UnixNano(),
+		Level:  ent.Level.String(),
+		Msg:    ent.Message,
+		Fields: "",
+		Line:   ent.Caller.File + ":" + strconv.Itoa(ent.Caller.Line),
+		Func:   ent.Caller.Function,
+	}
+
 	// 提取traceID
-	traceID := ""
 	if v, ok := enc.Fields["traceID"]; ok {
-		traceID = fmt.Sprint(v)
+		data.TraceID = cast.ToString(v)
 		delete(enc.Fields, "traceID")
 	}
+
 	// 提取spanID
-	spanID := ""
 	if v, ok := enc.Fields["spanID"]; ok {
-		spanID = fmt.Sprint(v)
+		data.SpanID = cast.ToString(v)
 		delete(enc.Fields, "spanID")
 	}
 
-	req := ""
-	if v, ok := enc.Fields["req"]; ok {
-		req = fmt.Sprint(v)
-		delete(enc.Fields, "req")
-	}
-	rsp := ""
-	if v, ok := enc.Fields["rsp"]; ok {
-		rsp = fmt.Sprint(v)
-		delete(enc.Fields, "rsp")
+	if v, ok := enc.Fields["duration"]; ok {
+		data.Duration = cast.ToInt64(v)
+		delete(enc.Fields, "duration")
 	}
 
-	data := &LogData{
-		T:       ent.Time.UnixNano(),
-		Level:   ent.Level.String(),
-		Msg:     ent.Message,
-		Fields:  "",
-		Line:    ent.Caller.File + ":" + strconv.Itoa(ent.Caller.Line),
-		Func:    ent.Caller.Function,
-		TraceID: traceID,
-		SpanID:  spanID,
-		Req:     req,
-		Rsp:     rsp,
+	if v, ok := enc.Fields["code"]; ok {
+		data.Code = cast.ToInt64(v)
+		delete(enc.Fields, "code")
+	}
+	if v, ok := enc.Fields["codeType"]; ok {
+		data.CodeType = cast.ToString(v)
+		delete(enc.Fields, "codeType")
+	}
+	if v, ok := enc.Fields["callerService"]; ok {
+		data.CallerService = cast.ToString(v)
+		delete(enc.Fields, "callerService")
+	}
+	if v, ok := enc.Fields["callerMethod"]; ok {
+		data.CallerMethod = cast.ToString(v)
+		delete(enc.Fields, "callerMethod")
+	}
+	if v, ok := enc.Fields["calleeService"]; ok {
+		data.CalleeService = cast.ToString(v)
+		delete(enc.Fields, "calleeService")
+	}
+	if v, ok := enc.Fields["calleeMethod"]; ok {
+		data.CalleeMethod = cast.ToString(v)
+		delete(enc.Fields, "calleeMethod")
+	}
+
+	if v, ok := enc.Fields["req"]; ok {
+		data.Req = cast.ToString(v)
+		delete(enc.Fields, "req")
+	}
+	if v, ok := enc.Fields["rsp"]; ok {
+		data.Rsp = cast.ToString(v)
+		delete(enc.Fields, "rsp")
 	}
 
 	// 序列化fields
@@ -73,7 +104,7 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 			fieldsBuff.WriteByte(',')
 			fieldsBuff.WriteString(k)
 			fieldsBuff.WriteByte('=')
-			fieldsBuff.WriteString(fmt.Sprint(v))
+			fieldsBuff.WriteString(cast.ToString(v))
 		}
 		data.Fields = string(fieldsBuff.Bytes()[1:])
 	}

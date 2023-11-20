@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/spf13/cast"
+
 	"github.com/zly-app/honey/log_data"
 )
 
@@ -15,7 +17,7 @@ type LokiBody struct {
 	Streams []*LokiStreamBody `json:"streams"`
 }
 
-var StdFormat = "{msg} line={line} func={func} traceID={traceID} spanID={spanID} req={req} rsp={rsp} fields={fields}"
+var StdFormat = "{msg} line={line} func={func} traceID={traceID} spanID={spanID} duration={duration} req={req} rsp={rsp} fields={fields}"
 
 func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody {
 	streams := make([]*LokiStreamBody, len(data))
@@ -28,14 +30,21 @@ func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody
 		text = strings.ReplaceAll(text, "{spanID}", v.SpanID)
 		text = strings.ReplaceAll(text, "{req}", v.Req)
 		text = strings.ReplaceAll(text, "{rsp}", v.Rsp)
+		text = strings.ReplaceAll(text, "{duration}", cast.ToString(v.Duration))
 		text = strings.ReplaceAll(text, "{fields}", v.Fields)
 
 		streamBody := &LokiStreamBody{
 			Stream: map[string]string{
-				"env":      env,
-				"app":      app,
-				"instance": instance,
-				"level":    strings.ToLower(v.Level),
+				"env":           env,
+				"app":           app,
+				"instance":      instance,
+				"level":         strings.ToLower(v.Level),
+				"code":          cast.ToString(v.Code),
+				"codeType":      v.CodeType,
+				"callerService": v.CallerService,
+				"callerMethod":  v.CallerMethod,
+				"calleeService": v.CalleeService,
+				"calleeMethod":  v.CalleeMethod,
 			},
 			Values: [][]string{
 				{strconv.FormatInt(v.T, 10), text},
