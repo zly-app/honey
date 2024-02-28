@@ -2,8 +2,12 @@ package log_data
 
 import (
 	"bytes"
+	"fmt"
+	"html/template"
+	"reflect"
 	"strconv"
 
+	"github.com/bytedance/sonic"
 	"github.com/spf13/cast"
 	"go.uber.org/zap/zapcore"
 )
@@ -48,13 +52,13 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 
 	// 提取traceID
 	if v, ok := enc.Fields["traceID"]; ok {
-		data.TraceID = cast.ToString(v)
+		data.TraceID = ToString(v)
 		delete(enc.Fields, "traceID")
 	}
 
 	// 提取spanID
 	if v, ok := enc.Fields["spanID"]; ok {
-		data.SpanID = cast.ToString(v)
+		data.SpanID = ToString(v)
 		delete(enc.Fields, "spanID")
 	}
 
@@ -68,32 +72,32 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 		delete(enc.Fields, "code")
 	}
 	if v, ok := enc.Fields["codeType"]; ok {
-		data.CodeType = cast.ToString(v)
+		data.CodeType = ToString(v)
 		delete(enc.Fields, "codeType")
 	}
 	if v, ok := enc.Fields["callerService"]; ok {
-		data.CallerService = cast.ToString(v)
+		data.CallerService = ToString(v)
 		delete(enc.Fields, "callerService")
 	}
 	if v, ok := enc.Fields["callerMethod"]; ok {
-		data.CallerMethod = cast.ToString(v)
+		data.CallerMethod = ToString(v)
 		delete(enc.Fields, "callerMethod")
 	}
 	if v, ok := enc.Fields["calleeService"]; ok {
-		data.CalleeService = cast.ToString(v)
+		data.CalleeService = ToString(v)
 		delete(enc.Fields, "calleeService")
 	}
 	if v, ok := enc.Fields["calleeMethod"]; ok {
-		data.CalleeMethod = cast.ToString(v)
+		data.CalleeMethod = ToString(v)
 		delete(enc.Fields, "calleeMethod")
 	}
 
 	if v, ok := enc.Fields["req"]; ok {
-		data.Req = cast.ToString(v)
+		data.Req = ToString(v)
 		delete(enc.Fields, "req")
 	}
 	if v, ok := enc.Fields["rsp"]; ok {
-		data.Rsp = cast.ToString(v)
+		data.Rsp = ToString(v)
 		delete(enc.Fields, "rsp")
 	}
 
@@ -104,10 +108,81 @@ func MakeLogData(ent *zapcore.Entry, fields []zapcore.Field) *LogData {
 			fieldsBuff.WriteByte(',')
 			fieldsBuff.WriteString(k)
 			fieldsBuff.WriteByte('=')
-			fieldsBuff.WriteString(cast.ToString(v))
+			fieldsBuff.WriteString(ToString(v))
 		}
 		data.Fields = string(fieldsBuff.Bytes()[1:])
 	}
 
 	return data
+}
+
+func indirectToStringerOrError(a interface{}) interface{} {
+	if a == nil {
+		return nil
+	}
+
+	var errorType = reflect.TypeOf((*error)(nil)).Elem()
+	var fmtStringerType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+
+	v := reflect.ValueOf(a)
+	for !v.Type().Implements(fmtStringerType) && !v.Type().Implements(errorType) && v.Kind() == reflect.Ptr && !v.IsNil() {
+		v = v.Elem()
+	}
+	return v.Interface()
+}
+
+func ToString(i interface{}) string {
+	i = indirectToStringerOrError(i)
+
+	switch s := i.(type) {
+	case string:
+		return s
+	case bool:
+		return strconv.FormatBool(s)
+	case float64:
+		return strconv.FormatFloat(s, 'f', -1, 64)
+	case float32:
+		return strconv.FormatFloat(float64(s), 'f', -1, 32)
+	case int:
+		return strconv.Itoa(s)
+	case int64:
+		return strconv.FormatInt(s, 10)
+	case int32:
+		return strconv.Itoa(int(s))
+	case int16:
+		return strconv.FormatInt(int64(s), 10)
+	case int8:
+		return strconv.FormatInt(int64(s), 10)
+	case uint:
+		return strconv.FormatInt(int64(s), 10)
+	case uint64:
+		return strconv.FormatInt(int64(s), 10)
+	case uint32:
+		return strconv.FormatInt(int64(s), 10)
+	case uint16:
+		return strconv.FormatInt(int64(s), 10)
+	case uint8:
+		return strconv.FormatInt(int64(s), 10)
+	case []byte:
+		return string(s)
+	case template.HTML:
+		return string(s)
+	case template.URL:
+		return string(s)
+	case template.JS:
+		return string(s)
+	case template.CSS:
+		return string(s)
+	case template.HTMLAttr:
+		return string(s)
+	case nil:
+		return "<nil>"
+	case fmt.Stringer:
+		return s.String()
+	case error:
+		return s.Error()
+	default:
+		v, _ := sonic.MarshalString(i)
+		return v
+	}
 }
