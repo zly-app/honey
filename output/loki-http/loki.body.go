@@ -45,6 +45,8 @@ func MakeLokiBody(env, app, instance string, data []*log_data.LogData) *LokiBody
 				"callerMethod":  v.CallerMethod,
 				"calleeService": v.CalleeService,
 				"calleeMethod":  v.CalleeMethod,
+				"traceID":       v.TraceID,
+				"spanID":        v.SpanID,
 			},
 			Values: [][]string{
 				{strconv.FormatInt(v.T, 10), text},
