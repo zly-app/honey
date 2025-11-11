@@ -135,7 +135,9 @@ input: # honey 输入器
 
 进入 `Tempo`数据源配置, 在`Trace to logs`下修改配置类似下图
 
-![Tempo配置](./assets/grafana.tempo.config.png)
+![img.png](assets/grafana.tempo.config.png)
+
+其`Query`值为 `{ ${__tags} , traceID="${__span.traceId}" , spanID="${__span.spanId}" } |= ""`
 
 最终trace数据会得到一个`Logs for this span`的按钮, 点击他会跳转到`Loki`的当前traceID日志
 
