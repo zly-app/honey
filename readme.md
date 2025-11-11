@@ -120,7 +120,7 @@ input: # honey 输入器
 进入`Loki`数据源配置, 在 `Derived fields` 下增加一个导出字段.
 
 `Name` 为 `traceID`.
-`Regex` 为 `traceID=([0-9a-fA-F]*)`.
+`Label` 为 `traceID`.
 `Query` 为 `${__value.raw}`
 `URL Label` 为 `转到trace`
 `Internal Link` 启用并设为 `Tempo`
