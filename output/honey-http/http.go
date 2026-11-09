@@ -114,7 +114,7 @@ func (h *HttpOutput) out(env, app, instance string, data []*log_data.LogData) er
 	}
 
 	if result.ErrCode != 0 {
-		return fmt.Errorf("上报失败, 错误的响应: errCode:%v, errMsg",
+		return fmt.Errorf("上报失败, 错误的响应: errCode:%v, errMsg:%v",
 			result.ErrCode, result.ErrMsg)
 	}
 	return nil
