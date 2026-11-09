@@ -34,7 +34,7 @@ func (h *Honey) Init() {
 	conf := config.NewConfig()
 	err := h.app.GetConfig().ParseServiceConfig(DefaultServiceType, conf, true)
 	if err == nil {
-		err = conf.Check()
+		err = conf.Check(h.app.Name())
 	}
 	if err != nil {
 		h.app.Fatal("honey配置错误", zap.String("ServiceType", string(DefaultServiceType)), zap.Error(err))

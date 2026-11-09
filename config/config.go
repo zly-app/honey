@@ -1,12 +1,8 @@
 package config
 
 import (
-	"github.com/zly-app/zapp"
-
 	"github.com/zly-app/honey/pkg/utils"
 )
-
-var Conf *Config
 
 const (
 	// 默认环境名
@@ -52,16 +48,16 @@ func NewConfig() *Config {
 		Outputs: DefaultOutputs,
 	}
 	conf.ThisLog.StopLogOutput = DefaultThisLogStopLogOutput
-	Conf = conf
 	return conf
 }
 
-func (conf *Config) Check() error {
+// Check 校验并补齐默认值。appName 由服务实例注入（不再读 zapp 包级单例）。
+func (conf *Config) Check(appName string) error {
 	if conf.ThisLog.Env == "" {
 		conf.ThisLog.Env = DefaultThisLogEnv
 	}
 	if conf.ThisLog.App == "" {
-		conf.ThisLog.App = zapp.App().Name()
+		conf.ThisLog.App = appName
 	}
 	if conf.ThisLog.Instance == "" {
 		conf.ThisLog.Instance = utils.GetInstance(DefaultThisLogInstance)
