@@ -1,7 +1,7 @@
 package input
 
 import (
-	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/log"
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/component"
@@ -21,7 +21,7 @@ var inputCreators = make(map[string]InputCreator)
 // 注册输入设备建造者
 func RegistryInputCreator(name string, rc InputCreator) {
 	if _, ok := inputCreators[name]; ok {
-		logger.Log.Fatal("重复注册Input建造者", zap.String("name", name))
+		log.Log.Fatal("重复注册Input建造者", zap.String("name", name))
 	}
 	inputCreators[name] = rc
 }
@@ -30,7 +30,7 @@ func RegistryInputCreator(name string, rc InputCreator) {
 func MakeInput(c component.ILogCollector, iConfig component.IInputConfig, name string) IInput {
 	ic, ok := inputCreators[name]
 	if !ok {
-		logger.Log.Fatal("试图构建未注册建造者的Input", zap.String("name", name))
+		log.Log.Fatal("试图构建未注册建造者的Input", zap.String("name", name))
 	}
 	return ic(c, iConfig)
 }

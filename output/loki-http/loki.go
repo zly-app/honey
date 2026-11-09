@@ -12,7 +12,7 @@ import (
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/log"
 	"github.com/zly-app/zapp/pkg/utils"
 	"go.uber.org/zap"
 
@@ -102,7 +102,7 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 		err = conf.Check()
 	}
 	if err != nil {
-		logger.Log.Fatal("获取loki-http输出设备配置失败", zap.Error(err))
+		log.Log.Fatal("获取loki-http输出设备配置失败", zap.Error(err))
 	}
 
 	h := &HttpOutput{
@@ -122,7 +122,7 @@ func NewHttpOutput(iConfig component.IOutputConfig) *HttpOutput {
 	if conf.ProxyAddress != "" {
 		p, err := utils.NewHttpProxy(conf.ProxyAddress)
 		if err != nil {
-			logger.Log.Fatal("创建loki-http代理失败", zap.Error(err))
+			log.Log.Fatal("创建loki-http代理失败", zap.Error(err))
 		}
 		p.SetProxy(transport)
 	}

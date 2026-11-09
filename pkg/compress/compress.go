@@ -3,7 +3,7 @@ package compress
 import (
 	"io"
 
-	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/log"
 	"go.uber.org/zap"
 )
 
@@ -23,7 +23,7 @@ var compresses = map[string]ICompress{
 // 注册压缩程序
 func RegistryCompress(name string, c ICompress) {
 	if _, ok := compresses[name]; ok {
-		logger.Log.Panic("Compress重复注册", zap.String("name", name))
+		log.Log.Panic("Compress重复注册", zap.String("name", name))
 	}
 	compresses[name] = c
 }
@@ -32,7 +32,7 @@ func RegistryCompress(name string, c ICompress) {
 func GetCompress(name string) ICompress {
 	c, ok := compresses[name]
 	if !ok {
-		logger.Log.Panic("未定义的CompressName", zap.String("name", name))
+		log.Log.Panic("未定义的CompressName", zap.String("name", name))
 	}
 	return c
 }

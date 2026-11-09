@@ -5,7 +5,7 @@ import (
 	"github.com/zly-app/service/api/config"
 	"github.com/zly-app/zapp"
 	"github.com/zly-app/zapp/core"
-	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/log"
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/component"
@@ -31,7 +31,7 @@ func NewHttpInput(c component.ILogCollector, iConfig component.IInputConfig) *Ht
 		err = conf.Check()
 	}
 	if err != nil {
-		logger.Log.Fatal("获取http输入器配置失败", zap.Error(err))
+		log.Log.Fatal("获取http输入器配置失败", zap.Error(err))
 	}
 	h := &HttpInput{
 		c: c,

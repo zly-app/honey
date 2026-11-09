@@ -1,7 +1,7 @@
 package output
 
 import (
-	"github.com/zly-app/zapp/logger"
+	"github.com/zly-app/zapp/log"
 	"go.uber.org/zap"
 
 	"github.com/zly-app/honey/component"
@@ -24,7 +24,7 @@ var outputCreators = make(map[string]OutputCreator)
 // 注册输出设备建造者
 func RegistryOutputCreator(name string, oc OutputCreator) {
 	if _, ok := outputCreators[name]; ok {
-		logger.Log.Fatal("重复注册Output建造者", zap.String("name", name))
+		log.Log.Fatal("重复注册Output建造者", zap.String("name", name))
 	}
 	outputCreators[name] = oc
 }
@@ -33,7 +33,7 @@ func RegistryOutputCreator(name string, oc OutputCreator) {
 func MakeOutput(iConfig component.IOutputConfig, name string) IOutput {
 	oc, ok := outputCreators[name]
 	if !ok {
-		logger.Log.Fatal("试图构建未注册建造者的Output", zap.String("name", name))
+		log.Log.Fatal("试图构建未注册建造者的Output", zap.String("name", name))
 	}
 	return oc(iConfig)
 }
